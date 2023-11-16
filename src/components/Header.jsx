@@ -9,19 +9,20 @@ const StHeader = styled.div`
   background-image: url(${bannerLogo}), url(${bgRightImg}), url(${bgLeftImg}),
     url(${bannerBg});
   background-position: 50% 0%, 100% 30%, 0 50%, 50% 50%;
-  background-size: auto 160px, auto 200px, auto 200px, auto 204px;
+  background-size: auto 140px, auto 200px, auto 200px, 100% 204px;
   background-repeat: no-repeat;
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: end;
   gap: 8px;
-  padding: 4px;
+  padding: 12px;
   box-sizing: border-box;
 `;
 
 const StNavBtn = styled.button`
   border: none;
+  width: 100px;
   padding: 12px;
   cursor: pointer;
 `;

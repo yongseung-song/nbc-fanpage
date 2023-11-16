@@ -11,12 +11,24 @@ const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
   }
-  body > * {
+  body * {
     font-family: ${fontFamily};
+    ${"" /* background-color: #f0f0f0; */}
+    box-sizing: border-box;
   }
   h1 {
     font-variation-settings: "wght" 700;
     font-size: 3rem;
+  }
+  input {
+    width: 80%;
+  }
+  button {
+    display: block;
+    width: 100px;
+    border: none;
+    align-items: end;
+    background-color: white;
   }
 `;
 
