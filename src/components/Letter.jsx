@@ -15,6 +15,7 @@ const StImg = styled.img`
   width: 50px;
   height: 50px;
   margin-right: 12px;
+  border-radius: 100%;
 `;
 
 const StLetterMsg = styled.p`
@@ -23,20 +24,26 @@ const StLetterMsg = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-const StLetterContents = styled.p`
+const StLetterContents = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 6px;
 `;
 
-function Letter() {
+function Letter({ letter }) {
+  const letterClickHandler = () => {};
+  // console.log(letter);
+
   return (
-    <StLetterContainer>
-      <StImg src="" alt="img" />
+    <StLetterContainer onClick={letterClickHandler}>
+      <StImg src={letter.avatar} alt="img" />
       <StLetterContents>
-        <h3>양재인</h3>
-        <p>231116</p>
-        <StLetterMsg>
-          쩐다쩐다쩐다쩐다쩐다쩐다 쩐다쩐다쩐다쩐다쩐다쩐다쩐다쩐다쩐다
-        </StLetterMsg>
+        <h3>{letter.nickname}</h3>
+        <p>{letter.createdAt}</p>
+        <StLetterMsg>{letter.content}</StLetterMsg>
       </StLetterContents>
     </StLetterContainer>
   );

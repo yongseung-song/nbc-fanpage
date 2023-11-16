@@ -8,10 +8,9 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}>
-          {/* <Route path="detail" element={<Detail />} />
-          <Route path="schedule" element={<Schedule />} /> */}
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="detail" element={<Detail />} />
+        <Route path="schedule" element={<Schedule />} />
       </Routes>
     </BrowserRouter>
   );

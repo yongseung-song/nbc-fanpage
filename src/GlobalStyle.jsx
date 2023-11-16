@@ -23,6 +23,9 @@ const GlobalStyle = createGlobalStyle`
   input {
     width: 80%;
   }
+  textarea {
+    resize: none;
+  }
   button {
     display: block;
     width: 100px;

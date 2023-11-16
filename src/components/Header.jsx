@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import bannerBg from "../assets/bannerBg.png";
 import bannerLogo from "../assets/bannerLogo.png";
 import bgRightImg from "../assets/pyung.png";
 import bgLeftImg from "../assets/jang.png";
+import { membersMap, members } from "pages/Home";
+import { click } from "@testing-library/user-event/dist/click";
 
 const StHeader = styled.div`
   background-image: url(${bannerLogo}), url(${bgRightImg}), url(${bgLeftImg}),
@@ -25,13 +27,31 @@ const StNavBtn = styled.button`
   width: 100px;
   padding: 12px;
   cursor: pointer;
+  background-color: ${(props) => (props.selected ? "yellow" : "white")};
 `;
-function Header() {
+function Header({ selectedMember, setSelectedMember }) {
+  const selectButtonHandler = (e) => {
+    e.preventDefault();
+    const id = +e.target.id;
+    setSelectedMember(membersMap.get(id));
+    // console.log(e.target.id);
+  };
+
   return (
     <>
       <StHeader>
-        <StNavBtn onClick={(e) => console.log(e)}>Schedule</StNavBtn>
-        <StNavBtn>Letters</StNavBtn>
+        {members.map((member, idx) => {
+          return (
+            <StNavBtn
+              selected={member === selectedMember}
+              id={idx}
+              key={idx}
+              onClick={selectButtonHandler}
+            >
+              {member}
+            </StNavBtn>
+          );
+        })}
       </StHeader>
     </>
   );
