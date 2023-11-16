@@ -1,6 +1,10 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { members } from "pages/Home";
+import { v4 as uuid } from "uuid";
+import dayjs from "dayjs";
+
+const lengthLimit = 100;
 
 const StLetterFormContainer = styled.div`
   min-width: 200px;
@@ -18,9 +22,13 @@ const StInputContainer = styled.div`
   margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
+  position: relative;
 
-  textarea {
-    width: 80%;
+  input:focus {
+    outline: none;
+  }
+  textarea:focus {
+    outline: none;
   }
 `;
 const StSelectContainer = styled.div`
@@ -35,30 +43,54 @@ const StBtnContainer = styled.div`
 
 const StMaxLengthIndicator = styled.span`
   display: block;
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 0.75rem;
   text-align: right;
+  color: ${(props) => (props.isMax ? "black" : "red")};
 `;
 
-function LetterForm({ selectedMember }) {
+function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
+  const [textLength, setTextLength] = useState(0);
   const textRef = useRef();
   const textAreaRef = useRef();
   const selectRef = useRef();
 
+  useEffect(() => {
+    textRef.current.focus();
+  }, [selectedMember]);
   const letterSubmitHandler = (e) => {
     e.preventDefault();
     const letter = {
+      id: uuid(),
+      createdAt: dayjs().toJSON(),
       nickname: textRef.current.value,
       content: textAreaRef.current.value,
       writedTo: selectRef.current.value,
+      avatar: "logo192.png",
     };
     const test = { ...letter };
+    console.log(dayjs(test.createdAt).format("YYYY-MM-DD hh:mm"));
     // TODO 함수로 분리하기
-    const testString = JSON.stringify(test);
-    const possibleStr = testString.replace(/\n/gi, "\\r\\n");
-    console.log(JSON.parse(possibleStr));
-    console.log(testString);
+    // const testString = JSON.stringify(test);
+    // const possibleStr = testString.replace(/\n/gi, "\\r\\n");
+    // console.log(JSON.parse(possibleStr));
+    // console.log(testString);
+    setLetterList((prevList) => [letter, ...prevList]);
 
+    // TODO 뭔가 이상하다
+    setSelectedMember((prevMember) =>
+      prevMember === "이장원" ? "신재평" : "이장원"
+    );
     textRef.current.value = "";
+    textAreaRef.current.value = "";
+
     console.log(letter);
+  };
+
+  const textAreaChangeHandler = () => {
+    setTextLength(textAreaRef.current.value.length);
   };
 
   return (
@@ -73,20 +105,24 @@ function LetterForm({ selectedMember }) {
           <textarea
             ref={textAreaRef}
             required
+            autoCorrect="false"
             id="textarea"
             name="textarea"
             rows={5}
-            maxLength={150}
+            maxLength={lengthLimit}
+            onChange={textAreaChangeHandler}
           />
+          <StMaxLengthIndicator isMax={textLength < lengthLimit}>
+            {textLength}/{lengthLimit}
+          </StMaxLengthIndicator>
         </StInputContainer>
-        <StMaxLengthIndicator>0/150</StMaxLengthIndicator>
         <StSelectContainer>
           <label htmlFor="member-select">누구에게 보내실 건가요?</label>
           <select
             ref={selectRef}
             id="member-select"
             defaultValue={selectedMember}
-            name=""
+            name="member-select"
           >
             <option value="이장원">이장원</option>
             <option value="신재평">신재평</option>

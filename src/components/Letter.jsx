@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import dayjs from "dayjs";
 
 const StLetterContainer = styled.div`
   padding: 12px;
@@ -10,7 +11,7 @@ const StLetterContainer = styled.div`
 `;
 
 const StImg = styled.img`
-  background-color: magenta;
+  background-color: #aaa;
   flex-shrink: 0;
   width: 50px;
   height: 50px;
@@ -42,7 +43,7 @@ function Letter({ letter }) {
       <StImg src={letter.avatar} alt="img" />
       <StLetterContents>
         <h3>{letter.nickname}</h3>
-        <p>{letter.createdAt}</p>
+        <p>{dayjs(letter.createdAt).format("YYYY년 MM월 DD일 hh:mm")}</p>
         <StLetterMsg>{letter.content}</StLetterMsg>
       </StLetterContents>
     </StLetterContainer>

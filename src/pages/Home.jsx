@@ -32,9 +32,9 @@ function Home() {
       />
       <StLetterContainer>
         <LetterForm
-          letterList={letterList}
           setLetterList={setLetterList}
           selectedMember={selectedMember}
+          setSelectedMember={setSelectedMember}
         />
         <LetterList
           letterList={letterList}

@@ -21,10 +21,12 @@ const GlobalStyle = createGlobalStyle`
     font-size: 3rem;
   }
   input {
-    width: 80%;
+    width: 85%;
   }
   textarea {
     resize: none;
+    width: 85%;
+    line-height: 1.5;
   }
   button {
     display: block;
