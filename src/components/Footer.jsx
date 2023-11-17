@@ -2,7 +2,7 @@ import React from "react";
 import bannerBg from "../assets/bannerBg.png";
 import styled from "styled-components";
 
-const StFooter = styled.div`
+const StFooter = styled.footer`
   background-image: url(${bannerBg});
   background-size: 100% 120px;
   background-position-y: bottom;

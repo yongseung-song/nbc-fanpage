@@ -35,6 +35,10 @@ const GlobalStyle = createGlobalStyle`
     align-items: end;
     background-color: white;
   }
+
+  footer {
+    font-size: 0.8rem;
+  }
 `;
 
 export default GlobalStyle;

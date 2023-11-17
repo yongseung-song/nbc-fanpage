@@ -4,7 +4,8 @@ import { members } from "pages/Home";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 
-const lengthLimit = 100;
+const nicknameLimit = 20;
+const contentLimit = 100;
 
 const StLetterFormContainer = styled.div`
   min-width: 200px;
@@ -52,7 +53,8 @@ const StMaxLengthIndicator = styled.span`
 `;
 
 function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
-  const [textLength, setTextLength] = useState(0);
+  const [contentLength, setContentLength] = useState(0);
+  const [nicknameLength, setNicknameLength] = useState(0);
   const textRef = useRef();
   const textAreaRef = useRef();
   const selectRef = useRef();
@@ -62,35 +64,35 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
   }, [selectedMember]);
   const letterSubmitHandler = (e) => {
     e.preventDefault();
-    const letter = {
-      id: uuid(),
-      createdAt: dayjs().toJSON(),
-      nickname: textRef.current.value,
-      content: textAreaRef.current.value,
-      writedTo: selectRef.current.value,
-      avatar: "logo192.png",
-    };
-    const test = { ...letter };
-    console.log(dayjs(test.createdAt).format("YYYY-MM-DD hh:mm"));
-    // TODO 함수로 분리하기
-    // const testString = JSON.stringify(test);
-    // const possibleStr = testString.replace(/\n/gi, "\\r\\n");
-    // console.log(JSON.parse(possibleStr));
-    // console.log(testString);
-    setLetterList((prevList) => [letter, ...prevList]);
+    if (textRef.current.value && textAreaRef.current.value) {
+      const letter = {
+        id: uuid(),
+        createdAt: dayjs().toJSON(),
+        nickname: textRef.current.value,
+        content: textAreaRef.current.value,
+        writedTo: selectRef.current.value,
+        avatar: "logo192.png",
+      };
+      const test = { ...letter };
+      console.log(dayjs(test.createdAt).format("YYYY-MM-DD hh:mm"));
+      // TODO 함수로 분리하기
+      // const testString = JSON.stringify(test);
+      // const possibleStr = testString.replace(/\n/gi, "\\r\\n");
+      // console.log(JSON.parse(possibleStr));
+      // console.log(testString);
+      setLetterList((prevList) => [letter, ...prevList]);
 
-    // TODO 뭔가 이상하다
-    setSelectedMember((prevMember) =>
-      prevMember === "이장원" ? "신재평" : "이장원"
-    );
-    textRef.current.value = "";
-    textAreaRef.current.value = "";
-
-    console.log(letter);
+      setSelectedMember(selectRef.current.value);
+      textRef.current.value = "";
+      textAreaRef.current.value = "";
+    } else {
+      alert("닉네임과 내용을 입력해주세요.");
+    }
   };
 
-  const textAreaChangeHandler = () => {
-    setTextLength(textAreaRef.current.value.length);
+  const textChangeHandler = () => {
+    setContentLength(textAreaRef.current.value.length);
+    setNicknameLength(textRef.current.value.length);
   };
 
   return (
@@ -98,7 +100,18 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
       <form action="">
         <StInputContainer>
           <label htmlFor="text">닉네임:</label>
-          <input ref={textRef} required autoFocus id="text" type="text" />
+          <input
+            ref={textRef}
+            required
+            autoFocus
+            id="text"
+            type="text"
+            maxLength={nicknameLimit}
+            onChange={textChangeHandler}
+          />
+          <StMaxLengthIndicator isMax={nicknameLength < nicknameLimit}>
+            {nicknameLength}/{nicknameLimit}
+          </StMaxLengthIndicator>
         </StInputContainer>
         <StInputContainer>
           <label htmlFor="textarea">내용:</label>
@@ -109,11 +122,11 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
             id="textarea"
             name="textarea"
             rows={5}
-            maxLength={lengthLimit}
-            onChange={textAreaChangeHandler}
+            maxLength={contentLimit}
+            onChange={textChangeHandler}
           />
-          <StMaxLengthIndicator isMax={textLength < lengthLimit}>
-            {textLength}/{lengthLimit}
+          <StMaxLengthIndicator isMax={contentLength < contentLimit}>
+            {contentLength}/{contentLimit}
           </StMaxLengthIndicator>
         </StInputContainer>
         <StSelectContainer>
