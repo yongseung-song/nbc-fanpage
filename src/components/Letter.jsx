@@ -1,30 +1,27 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
-const StLetterContainer = styled.div`
+const StLetterContainer = styled.li`
   padding: 12px;
   border: 1px solid black;
+  border-radius: 4px;
   margin-bottom: 12px;
   background-color: white;
   display: flex;
+  align-items: center;
 `;
 
 const StImg = styled.img`
   background-color: #aaa;
   flex-shrink: 0;
-  width: 50px;
-  height: 50px;
+  width: 64px;
+  height: 64px;
   margin-right: 12px;
   border-radius: 100%;
 `;
 
-const StLetterMsg = styled.p`
-  width: 85%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
 const StLetterContents = styled.div`
   width: 100%;
   display: flex;
@@ -32,18 +29,46 @@ const StLetterContents = styled.div`
   justify-content: center;
   align-items: start;
   gap: 6px;
+  padding: 8px 0;
+`;
+
+const StLetterDate = styled.p`
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #888;
+`;
+
+const StLetterMsg = styled.p`
+  width: 82%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px 0;
 `;
 
 function Letter({ letter }) {
-  const letterClickHandler = () => {};
+  const navigate = useNavigate();
+  const letterRef = useRef();
+  const letterClickHandler = () => {
+    const id = letterRef.current.id;
+    navigate(`details/${id}`);
+  };
   // console.log(letter);
 
   return (
-    <StLetterContainer onClick={letterClickHandler}>
+    <StLetterContainer
+      ref={letterRef}
+      id={letter.id}
+      onClick={letterClickHandler}
+    >
       <StImg src={letter.avatar} alt="img" />
       <StLetterContents>
         <h3>{letter.nickname}</h3>
-        <p>{dayjs(letter.createdAt).format("YYYY년 MM월 DD일 hh:mm")}</p>
+        <StLetterDate>
+          {`${dayjs(letter.createdAt).format(
+            "YYYY년 MM월 DD일 hh:mm"
+          )} 에 작성`}
+        </StLetterDate>
         <StLetterMsg>{letter.content}</StLetterMsg>
       </StLetterContents>
     </StLetterContainer>

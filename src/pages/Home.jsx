@@ -21,9 +21,7 @@ const StLetterContainer = styled.div`
   height: calc(100vh - 368px);
   /* background-color: #f0f0f0; */
 `;
-function Home() {
-  const [selectedMember, setSelectedMember] = useState("이장원");
-  const [letterList, setLetterList] = useState([]);
+function Home({ selectedMember, setSelectedMember, letterMap, setLetterMap }) {
   return (
     <StMainContainer>
       <Header
@@ -32,13 +30,13 @@ function Home() {
       />
       <StLetterContainer>
         <LetterForm
-          setLetterList={setLetterList}
+          setLetterMap={setLetterMap}
           selectedMember={selectedMember}
           setSelectedMember={setSelectedMember}
         />
         <LetterList
-          letterList={letterList}
-          setLetterList={setLetterList}
+          letterMap={letterMap}
+          setLetterMap={setLetterMap}
           selectedMember={selectedMember}
         />
       </StLetterContainer>

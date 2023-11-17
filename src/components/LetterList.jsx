@@ -3,7 +3,6 @@ import Letter from "./Letter";
 import styled from "styled-components";
 
 const StLetterListContainer = styled.div`
-  border: 2px dotted black;
   width: 100%;
   display: flex;
   overflow: scroll;
@@ -12,24 +11,36 @@ const StLetterListContainer = styled.div`
   padding: 12px;
 `;
 
-function LetterList({ letterList, setLetterList, selectedMember }) {
+function LetterList({ letterMap, setLetterMap, selectedMember }) {
   useEffect(() => {
-    if (!letterList.length) {
+    if (!letterMap.size) {
       fetch("fakeData.json")
         .then((res) => res.json())
-        .then((data) => setLetterList((prevList) => [...data, ...prevList]));
+        .then((data) =>
+          data.forEach((item) => {
+            setLetterMap((prevState) => ({
+              [item.id]: { ...item },
+              ...prevState,
+            }));
+          })
+        );
     }
   }, []);
 
-  const filterLetters = (letterList) => {
-    return letterList.filter((letter) => letter.writedTo === selectedMember);
+  console.log(letterMap);
+  const letterEntries = Object.entries(letterMap).reverse();
+  console.log(letterMap);
+  const filterLetters = () => {
+    return letterEntries.filter(
+      (letter) => letter[1].writedTo === selectedMember
+    );
   };
 
   return (
     <StLetterListContainer>
       <ul>
-        {filterLetters(letterList).map((letter) => {
-          return <Letter key={letter.id} letter={letter} />;
+        {filterLetters().map((item) => {
+          return <Letter key={item[0]} letter={item[1]} />;
         })}
       </ul>
     </StLetterListContainer>

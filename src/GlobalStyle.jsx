@@ -20,6 +20,9 @@ const GlobalStyle = createGlobalStyle`
     font-variation-settings: "wght" 700;
     font-size: 3rem;
   }
+  h3 {
+    font-weight: 600;
+  }
   input {
     width: 85%;
   }

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+// TODO 사용하지 않는 변수 없애기
 import { members } from "pages/Home";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
@@ -52,7 +53,7 @@ const StMaxLengthIndicator = styled.span`
   color: ${(props) => (props.isMax ? "black" : "red")};
 `;
 
-function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
+function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
   const [contentLength, setContentLength] = useState(0);
   const [nicknameLength, setNicknameLength] = useState(0);
   const textRef = useRef();
@@ -73,19 +74,18 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
         writedTo: selectRef.current.value,
         avatar: "logo192.png",
       };
-      const test = { ...letter };
-      console.log(dayjs(test.createdAt).format("YYYY-MM-DD hh:mm"));
-      // TODO 함수로 분리하기
-      // const testString = JSON.stringify(test);
-      // const possibleStr = testString.replace(/\n/gi, "\\r\\n");
-      // console.log(JSON.parse(possibleStr));
-      // console.log(testString);
-      setLetterList((prevList) => [letter, ...prevList]);
+      setLetterMap((prevState) => ({
+        [letter.id]: { ...letter },
+        ...prevState,
+      }));
 
       setSelectedMember(selectRef.current.value);
       textRef.current.value = "";
       textAreaRef.current.value = "";
+      setContentLength(textAreaRef.current.value.length);
+      setNicknameLength(textRef.current.value.length);
     } else {
+      // HMM 모달 넣기?
       alert("닉네임과 내용을 입력해주세요.");
     }
   };
@@ -104,6 +104,7 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
             ref={textRef}
             required
             autoFocus
+            autoComplete="off"
             id="text"
             type="text"
             maxLength={nicknameLimit}
@@ -118,7 +119,7 @@ function LetterForm({ setLetterList, selectedMember, setSelectedMember }) {
           <textarea
             ref={textAreaRef}
             required
-            autoCorrect="false"
+            autoCorrect="off"
             id="textarea"
             name="textarea"
             rows={5}
