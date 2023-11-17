@@ -58,18 +58,18 @@ function Letter({ letter }) {
   return (
     <StLetterContainer
       ref={letterRef}
-      id={letter.id}
+      id={letter?.id}
       onClick={letterClickHandler}
     >
-      <StImg src={letter.avatar} alt="img" />
+      <StImg src={letter?.avatar} alt={letter?.nickname} />
       <StLetterContents>
-        <h3>{letter.nickname}</h3>
+        <h3>{letter?.nickname}</h3>
         <StLetterDate>
-          {`${dayjs(letter.createdAt).format(
+          {`${dayjs(letter?.createdAt).format(
             "YYYY년 MM월 DD일 hh:mm"
           )} 에 작성`}
         </StLetterDate>
-        <StLetterMsg>{letter.content}</StLetterMsg>
+        <StLetterMsg>{letter?.content}</StLetterMsg>
       </StLetterContents>
     </StLetterContainer>
   );

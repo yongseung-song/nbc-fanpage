@@ -12,22 +12,7 @@ const StLetterListContainer = styled.div`
 `;
 
 function LetterList({ letterMap, setLetterMap, selectedMember }) {
-  useEffect(() => {
-    if (!letterMap.size) {
-      fetch("fakeData.json")
-        .then((res) => res.json())
-        .then((data) =>
-          data.forEach((item) => {
-            setLetterMap((prevState) => ({
-              [item.id]: { ...item },
-              ...prevState,
-            }));
-          })
-        );
-    }
-  }, []);
-
-  console.log(letterMap);
+  // console.log(letterMap);
   const letterEntries = Object.entries(letterMap).reverse();
   console.log(letterMap);
   const filterLetters = () => {

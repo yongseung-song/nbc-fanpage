@@ -2,7 +2,7 @@ import Footer from "components/Footer";
 import Header from "components/Header";
 import LetterForm from "components/LetterForm";
 import LetterList from "components/LetterList";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
@@ -21,7 +21,35 @@ const StLetterContainer = styled.div`
   height: calc(100vh - 368px);
   /* background-color: #f0f0f0; */
 `;
+
 function Home({ selectedMember, setSelectedMember, letterMap, setLetterMap }) {
+  useEffect(() => {
+    if (!localStorage.getItem("letters")) {
+      fetch("fakeData.json")
+        .then((res) => res.json())
+        .then((data) =>
+          data.forEach((item) => {
+            setLetterMap((prevState) => ({
+              [item.id]: { ...item },
+              ...prevState,
+            }));
+          })
+        );
+      const stringifiedLetterMap = JSON.stringify(letterMap);
+      localStorage.setItem("letters", stringifiedLetterMap);
+      console.log(letterMap);
+    } else {
+      const data = JSON.parse(localStorage.getItem("letters"));
+      setLetterMap(data);
+    }
+    // localStorage.setItem()
+  }, []);
+
+  useEffect(() => {
+    const stringifiedLetterMap = JSON.stringify(letterMap);
+    localStorage.setItem("letters", stringifiedLetterMap);
+  }, [letterMap]);
+
   return (
     <StMainContainer>
       <Header

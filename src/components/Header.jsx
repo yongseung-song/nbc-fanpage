@@ -5,7 +5,6 @@ import bannerLogo from "../assets/bannerLogo.png";
 import bgRightImg from "../assets/pyung.png";
 import bgLeftImg from "../assets/jang.png";
 import { membersMap, members } from "pages/Home";
-import { click } from "@testing-library/user-event/dist/click";
 
 const StHeader = styled.div`
   background-image: url(${bannerLogo}), url(${bgRightImg}), url(${bgLeftImg}),

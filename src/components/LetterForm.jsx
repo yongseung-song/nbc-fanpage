@@ -33,11 +33,13 @@ const StInputContainer = styled.div`
     outline: none;
   }
 `;
+
 const StSelectContainer = styled.div`
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
 `;
+
 const StBtnContainer = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -50,7 +52,7 @@ const StMaxLengthIndicator = styled.span`
   right: 2px;
   font-size: 0.75rem;
   text-align: right;
-  color: ${(props) => (props.isMax ? "black" : "red")};
+  color: ${(props) => (props.$isMax ? "black" : "red")};
 `;
 
 function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
@@ -110,7 +112,8 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
             maxLength={nicknameLimit}
             onChange={textChangeHandler}
           />
-          <StMaxLengthIndicator isMax={nicknameLength < nicknameLimit}>
+          {/* HMM transient props가 뭐지? 알아보기 */}
+          <StMaxLengthIndicator $isMax={nicknameLength < nicknameLimit}>
             {nicknameLength}/{nicknameLimit}
           </StMaxLengthIndicator>
         </StInputContainer>
@@ -126,7 +129,7 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
             maxLength={contentLimit}
             onChange={textChangeHandler}
           />
-          <StMaxLengthIndicator isMax={contentLength < contentLimit}>
+          <StMaxLengthIndicator $isMax={contentLength < contentLimit}>
             {contentLength}/{contentLimit}
           </StMaxLengthIndicator>
         </StInputContainer>
