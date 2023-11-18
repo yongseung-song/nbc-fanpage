@@ -115,6 +115,7 @@ function Detail({ letters, setLetters, isEditing, setIsEditing }) {
       // 무슨 일이 생겨서 Home 으로 이동하면 isEditing
       setIsEditing(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -148,7 +149,9 @@ function Detail({ letters, setLetters, isEditing, setIsEditing }) {
   };
 
   const editCompletedBtnClickHandler = (e) => {
-    updateLetter(textareaValue);
+    selectedLetter.content === textareaValue
+      ? alert("수정 사항이 없습니다.")
+      : updateLetter(textareaValue);
     setIsEditing(false);
   };
 
