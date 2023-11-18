@@ -3,14 +3,18 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
+const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
+
 const StLetterContainer = styled.li`
   padding: 12px;
-  border: 1px solid black;
-  border-radius: 4px;
+  border: 1px solid #0008;
+  border-radius: 12px;
   margin-bottom: 12px;
   background-color: white;
   display: flex;
+  flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StImg = styled.img`
@@ -23,26 +27,30 @@ const StImg = styled.img`
 `;
 
 const StLetterContents = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  gap: 6px;
-  padding: 8px 0;
+  width: 80%;
+  padding: 8px 0 6px;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const StLetterDate = styled.p`
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 400;
   color: #888;
 `;
 
 const StLetterMsg = styled.p`
-  width: 82%;
+  width: 100%;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-top: 6px;
   padding: 4px 0;
 `;
 
@@ -61,14 +69,14 @@ function Letter({ letter }) {
       id={letter?.id}
       onClick={letterClickHandler}
     >
-      <StImg src={letter?.avatar} alt={letter?.nickname} />
+      <StImg src={letter?.avatar || DEFAULT_IMG_URL} alt={letter?.nickname} />
       <StLetterContents>
-        <h3>{letter?.nickname}</h3>
-        <StLetterDate>
-          {`${dayjs(letter?.createdAt).format(
-            "YYYY년 MM월 DD일 hh:mm"
-          )} 에 작성`}
-        </StLetterDate>
+        <div>
+          <h3>{letter?.nickname}</h3>
+          <StLetterDate>
+            {`${dayjs(letter?.createdAt).format("YYYY년 MM월 DD일 h:mm")}`}
+          </StLetterDate>
+        </div>
         <StLetterMsg>{letter?.content}</StLetterMsg>
       </StLetterContents>
     </StLetterContainer>

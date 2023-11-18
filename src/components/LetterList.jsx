@@ -5,16 +5,16 @@ import styled from "styled-components";
 const StLetterListContainer = styled.div`
   width: 100%;
   display: flex;
-  overflow: scroll;
   flex-direction: column;
+  overflow: scroll;
+  padding-top: 6px;
   /* flex-wrap: no-wrap; */
-  padding: 12px;
 `;
 
-function LetterList({ letterMap, setLetterMap, selectedMember }) {
-  // console.log(letterMap);
-  const letterEntries = Object.entries(letterMap).reverse();
-  console.log(letterMap);
+function LetterList({ letters, setLetters, selectedMember }) {
+  // console.log(letters);
+  const letterEntries = Object.entries(letters).reverse();
+
   const filterLetters = () => {
     return letterEntries.filter(
       (letter) => letter[1].writedTo === selectedMember

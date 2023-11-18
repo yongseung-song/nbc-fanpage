@@ -5,8 +5,11 @@ import { members } from "pages/Home";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 
-const nicknameLimit = 20;
-const contentLimit = 100;
+const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
+const NICKNAME_LIMIT = 20;
+const CONTENT_LIMIT = 100;
+const BORDER_COLOR = "#0008";
+const BACKGROUND_COLOR = "#feffd0bf";
 
 const StLetterFormContainer = styled.div`
   min-width: 200px;
@@ -14,48 +17,83 @@ const StLetterFormContainer = styled.div`
   width: 100%;
   margin-bottom: 12px;
   padding: 12px;
-  /* border: 1px solid black; */
-  background-color: #ddd;
+  border: 1px solid ${BORDER_COLOR};
   border-radius: 12px;
+  background-color: white;
 `;
 
 const StInputContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-
+  font-size: 0.8rem;
+  label {
+    padding-top: 6px;
+  }
+  input {
+    padding: 4px 2px;
+    border: 1px solid ${BORDER_COLOR};
+  }
+  textarea {
+    border: 1px solid ${BORDER_COLOR};
+  }
   input:focus {
     outline: none;
+    background-color: ${BACKGROUND_COLOR};
   }
   textarea:focus {
     outline: none;
+    background-color: ${BACKGROUND_COLOR};
   }
 `;
 
 const StSelectContainer = styled.div`
   display: flex;
+  flex-direction: row;
   gap: 12px;
   margin-bottom: 12px;
+  label {
+    margin-top: 2px;
+  }
 `;
 
 const StBtnContainer = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
+`;
+
+const StSubmitBtn = styled.button`
+  cursor: pointer;
+  background-color: white;
+  text-align: center;
+  border: 1px solid ${BORDER_COLOR};
+  padding: 6px;
+  border-radius: 6px;
+  &:hover {
+    background-color: yellow;
+  }
 `;
 
 const StMaxLengthIndicator = styled.span`
   display: block;
   position: absolute;
-  bottom: 2px;
-  right: 2px;
+  bottom: 4px;
+  right: 4px;
   font-size: 0.75rem;
   text-align: right;
-  color: ${(props) => (props.$isMax ? "black" : "red")};
+  color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
 `;
 
-function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
+function LetterForm({
+  letters,
+  setLetters,
+  selectedMember,
+  setSelectedMember,
+}) {
   const [contentLength, setContentLength] = useState(0);
   const [nicknameLength, setNicknameLength] = useState(0);
   const textRef = useRef();
@@ -64,24 +102,28 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
 
   useEffect(() => {
     textRef.current.focus();
-  }, [selectedMember]);
+  }, [selectedMember, letters]);
+
   const letterSubmitHandler = (e) => {
     e.preventDefault();
+
     if (textRef.current.value && textAreaRef.current.value) {
-      const letter = {
+      const submittedLetter = {
         id: uuid(),
         createdAt: dayjs().toJSON(),
         nickname: textRef.current.value,
         content: textAreaRef.current.value,
         writedTo: selectRef.current.value,
-        avatar: "logo192.png",
+        avatar: DEFAULT_IMG_URL,
       };
-      setLetterMap((prevState) => ({
-        [letter.id]: { ...letter },
+
+      setLetters((prevState) => ({
         ...prevState,
+        [submittedLetter.id]: { ...submittedLetter },
       }));
 
       setSelectedMember(selectRef.current.value);
+
       textRef.current.value = "";
       textAreaRef.current.value = "";
       setContentLength(textAreaRef.current.value.length);
@@ -101,7 +143,7 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
     <StLetterFormContainer>
       <form action="">
         <StInputContainer>
-          <label htmlFor="text">닉네임:</label>
+          <label htmlFor="text">닉네임 :</label>
           <input
             ref={textRef}
             required
@@ -109,16 +151,16 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
             autoComplete="off"
             id="text"
             type="text"
-            maxLength={nicknameLimit}
+            maxLength={NICKNAME_LIMIT}
             onChange={textChangeHandler}
           />
           {/* HMM transient props가 뭐지? 알아보기 */}
-          <StMaxLengthIndicator $isMax={nicknameLength < nicknameLimit}>
-            {nicknameLength}/{nicknameLimit}
+          <StMaxLengthIndicator $isMax={nicknameLength < NICKNAME_LIMIT}>
+            {nicknameLength}/{NICKNAME_LIMIT}
           </StMaxLengthIndicator>
         </StInputContainer>
         <StInputContainer>
-          <label htmlFor="textarea">내용:</label>
+          <label htmlFor="textarea">내용 :</label>
           <textarea
             ref={textAreaRef}
             required
@@ -126,11 +168,11 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
             id="textarea"
             name="textarea"
             rows={5}
-            maxLength={contentLimit}
+            maxLength={CONTENT_LIMIT}
             onChange={textChangeHandler}
           />
-          <StMaxLengthIndicator $isMax={contentLength < contentLimit}>
-            {contentLength}/{contentLimit}
+          <StMaxLengthIndicator $isMax={contentLength < CONTENT_LIMIT}>
+            {contentLength}/{CONTENT_LIMIT}
           </StMaxLengthIndicator>
         </StInputContainer>
         <StSelectContainer>
@@ -146,7 +188,7 @@ function LetterForm({ setLetterMap, selectedMember, setSelectedMember }) {
           </select>
         </StSelectContainer>
         <StBtnContainer>
-          <button onClick={letterSubmitHandler}>팬레터 등록</button>
+          <StSubmitBtn onClick={letterSubmitHandler}>팬레터 등록</StSubmitBtn>
         </StBtnContainer>
       </form>
     </StLetterFormContainer>

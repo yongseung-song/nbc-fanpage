@@ -15,6 +15,12 @@ const GlobalStyle = createGlobalStyle`
     font-family: ${fontFamily};
     ${"" /* background-color: #f0f0f0; */}
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    -ms-overflow-style: none;
+  }
+  ::-webkit-scrollbar {
+    display: none;
   }
   h1 {
     font-variation-settings: "wght" 700;
@@ -23,19 +29,32 @@ const GlobalStyle = createGlobalStyle`
   h3 {
     font-weight: 600;
   }
+  label {
+    font-size: 0.8rem;
+  }
   input {
-    width: 85%;
+    width: 89%;
+  }
+  select {
+    padding: 4px;
+    margin-top: -5px;
+    border-radius: 4px;
+    border:1px solid #0008;
+    &:focus {
+      outline: none;
+      background-color: #feffd0bf;
+    }
   }
   textarea {
     resize: none;
-    width: 85%;
+    width: 89%;
     line-height: 1.5;
   }
   button {
     display: block;
     width: 100px;
     border: none;
-    align-items: end;
+    align-items: center;
     background-color: white;
   }
 
