@@ -94,25 +94,25 @@ function LetterForm({
   selectedMember,
   setSelectedMember,
 }) {
-  const [contentLength, setContentLength] = useState(0);
-  const [nicknameLength, setNicknameLength] = useState(0);
-  const textRef = useRef();
-  const textAreaRef = useRef();
+  const [textareaValue, setTextareaValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef();
+  const textareaRef = useRef();
   const selectRef = useRef();
 
   useEffect(() => {
-    textRef.current.focus();
+    inputRef.current.focus();
   }, [selectedMember, letters]);
 
   const letterSubmitHandler = (e) => {
     e.preventDefault();
 
-    if (textRef.current.value && textAreaRef.current.value) {
+    if (inputRef.current.value && textareaRef.current.value) {
       const submittedLetter = {
         id: uuid(),
         createdAt: dayjs().toJSON(),
-        nickname: textRef.current.value,
-        content: textAreaRef.current.value,
+        nickname: inputRef.current.value,
+        content: textareaRef.current.value,
         writedTo: selectRef.current.value,
         avatar: DEFAULT_IMG_URL,
       };
@@ -124,10 +124,8 @@ function LetterForm({
 
       setSelectedMember(selectRef.current.value);
 
-      textRef.current.value = "";
-      textAreaRef.current.value = "";
-      setContentLength(textAreaRef.current.value.length);
-      setNicknameLength(textRef.current.value.length);
+      setTextareaValue("");
+      setInputValue("");
     } else {
       // HMM 모달 넣기?
       alert("닉네임과 내용을 입력해주세요.");
@@ -135,8 +133,8 @@ function LetterForm({
   };
 
   const textChangeHandler = () => {
-    setContentLength(textAreaRef.current.value.length);
-    setNicknameLength(textRef.current.value.length);
+    setTextareaValue(textareaRef.current.value);
+    setInputValue(inputRef.current.value);
   };
 
   return (
@@ -145,8 +143,9 @@ function LetterForm({
         <StInputContainer>
           <label htmlFor="text">닉네임 :</label>
           <input
-            ref={textRef}
+            ref={inputRef}
             required
+            value={inputValue}
             autoFocus
             autoComplete="off"
             id="text"
@@ -155,24 +154,25 @@ function LetterForm({
             onChange={textChangeHandler}
           />
           {/* HMM transient props가 뭐지? 알아보기 */}
-          <StMaxLengthIndicator $isMax={nicknameLength < NICKNAME_LIMIT}>
-            {nicknameLength}/{NICKNAME_LIMIT}
+          <StMaxLengthIndicator $isMax={inputValue.length < NICKNAME_LIMIT}>
+            {inputValue.length}/{NICKNAME_LIMIT}
           </StMaxLengthIndicator>
         </StInputContainer>
         <StInputContainer>
           <label htmlFor="textarea">내용 :</label>
           <textarea
-            ref={textAreaRef}
+            ref={textareaRef}
             required
+            value={textareaValue}
             autoCorrect="off"
             id="textarea"
             name="textarea"
-            rows={5}
+            rows={4}
             maxLength={CONTENT_LIMIT}
             onChange={textChangeHandler}
           />
-          <StMaxLengthIndicator $isMax={contentLength < CONTENT_LIMIT}>
-            {contentLength}/{CONTENT_LIMIT}
+          <StMaxLengthIndicator $isMax={textareaValue.length < CONTENT_LIMIT}>
+            {textareaValue.length}/{CONTENT_LIMIT}
           </StMaxLengthIndicator>
         </StInputContainer>
         <StSelectContainer>

@@ -33,14 +33,7 @@ const StLetterContainer = styled.div`
   /* background-color: #f0f0f0; */
 `;
 
-function Home({
-  selectedMember,
-  setSelectedMember,
-  letters,
-  setLetters,
-  isEdited,
-  setIsEdited,
-}) {
+function Home({ selectedMember, setSelectedMember, letters, setLetters }) {
   useEffect(() => {
     if (!localStorage.getItem("letters")) {
       fetch("fakeData.json")
@@ -49,7 +42,7 @@ function Home({
           data.forEach((item) => {
             setLetters((prevState) => ({
               ...prevState,
-              [item.id]: { ...item, isEdited: isEdited },
+              [item.id]: { ...item, editedAt: "" },
             }));
           })
         );

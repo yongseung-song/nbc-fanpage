@@ -7,7 +7,6 @@ import Schedule from "../pages/Schedule";
 function Router() {
   const [selectedMember, setSelectedMember] = useState("이장원");
   const [letters, setLetters] = useState({});
-  const [isEdited, setIsEdited] = useState(false);
   return (
     <BrowserRouter>
       <Routes>
@@ -19,21 +18,12 @@ function Router() {
               setSelectedMember={setSelectedMember}
               letters={letters}
               setLetters={setLetters}
-              isEdited={isEdited}
-              setIsEdited={setIsEdited}
             />
           }
         />
         <Route
           path="details/:id"
-          element={
-            <Detail
-              letters={letters}
-              setLetters={setLetters}
-              isEdited={isEdited}
-              setIsEdited={setIsEdited}
-            />
-          }
+          element={<Detail letters={letters} setLetters={setLetters} />}
         />
         <Route path="schedule" element={<Schedule />} />
       </Routes>

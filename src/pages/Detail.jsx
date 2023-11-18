@@ -1,11 +1,12 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import styled from "styled-components";
 
 const defaultImage = "http://www.peppertones.net/P_%20copy.jpg";
+const TEXTAREA_LENGTH_LIMIT = 100;
 
 const StBGContainer = styled.div`
   background-color: #e3e2ce;
@@ -19,7 +20,8 @@ const StDetailContainer = styled.div`
   min-width: 200px;
   border: 1px solid #0008;
   border-radius: 8px;
-  height: 300px;
+  height: fit-content;
+  overflow: scroll;
   background-color: #eee;
   h4 {
     margin: 12px 16px;
@@ -29,6 +31,10 @@ const StDetailContainer = styled.div`
     font-size: 1.2rem;
     line-height: 1.5;
   }
+`;
+
+const StTextareaContainer = styled.div`
+  position: relative;
   textarea {
     border: none;
     background-color: #eee;
@@ -38,8 +44,18 @@ const StDetailContainer = styled.div`
   }
 `;
 
-const StDetailInfo = styled.div`
-  padding: 12px;
+const StMaxLengthIndicator = styled.span`
+  display: block;
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.75rem;
+  text-align: right;
+  color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
+`;
+
+const StDetailInfoWrapper = styled.div`
+  padding: 12px 0;
   gap: 6px;
   align-items: end;
   margin-top: auto;
@@ -63,6 +79,7 @@ const StDetailInfo = styled.div`
     color: #0005;
   }
 `;
+
 const StBtnContainer = styled.div`
   flex-direction: row;
   justify-content: center;
@@ -79,10 +96,13 @@ const StBtnContainer = styled.div`
   }
 `;
 
-function Detail({ letters, setLetters, isEdited, setIsEdited }) {
+function Detail({ letters, setLetters }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [textareaValue, setTextareaValue] = useState("");
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const textareaRef = useRef();
 
   useEffect(() => {
     if (!localStorage.getItem("letters") || Object.keys(params).length === 0) {
@@ -92,19 +112,79 @@ function Detail({ letters, setLetters, isEdited, setIsEdited }) {
       const storageData = JSON.parse(localStorage.getItem("letters"));
       setLetters(storageData);
     }
+    return () => {
+      // 무슨 일이 생겨서 Home 으로 이동하면 isEditing
+      setIsEditing(false);
+    };
   }, []);
 
-  // useEffect(() => {}, [isEdited]);
-  console.log(isEdited);
-  const selectedLetter = letters[params.id];
+  useEffect(() => {
+    const stringifiedLetterMap = JSON.stringify(letters);
+    localStorage.setItem("letters", stringifiedLetterMap);
+    // navigate("/");
+  }, [letters]);
+
+  const selectedLetter = useMemo(
+    () => ({ ...letters[params.id] }),
+    [letters, params.id]
+  );
+  const updateLetter = (updatedContent, updatedDate) => {
+    setLetters((prevLetters) => ({
+      ...prevLetters,
+      [params.id]: {
+        ...selectedLetter,
+        content: updatedContent,
+        editedAt: dayjs().toJSON(),
+      },
+    }));
+  };
+
+  const textareaChangeHandler = (e) => {
+    setTextareaValue(e.target.value);
+  };
 
   const editBtnClickHandler = (e) => {
-    setIsEdited((prevState) => !prevState);
+    setTextareaValue(selectedLetter.content);
+    // setIsEditing((prevState) => !prevState);
+    setIsEditing(true);
   };
+
+  const editCompletedBtnClickHandler = (e) => {
+    console.log(dayjs().toJSON());
+    updateLetter(textareaValue);
+    setIsEditing(false);
+  };
+
+  const editCancelBtnClickHandler = () => {
+    setIsEditing(false);
+  };
+
   const deleteBtnClickHandler = (e) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      console.log("letter is Deleted");
+      const updatedLetters = { ...letters };
+      delete updatedLetters[params.id];
+      setLetters(updatedLetters);
+      setTimeout(() => navigate("/"), 10);
     }
+  };
+  console.log(isEditing);
+  const setEditedDate = () => {
+    return (
+      <span>
+        {selectedLetter?.editedAt
+          ? dayjs(selectedLetter?.editedAt).isSame(
+              dayjs(selectedLetter?.createdAt),
+              "day"
+            )
+            ? `같은 날 ${dayjs(selectedLetter?.editedAt).format(
+                "hh:mm에 편집됨"
+              )}`
+            : dayjs(selectedLetter?.editedAt).format(
+                "YYYY년 M월 D일 hh:mm에 편집됨"
+              )
+          : ""}
+      </span>
+    );
   };
 
   return (
@@ -112,44 +192,51 @@ function Detail({ letters, setLetters, isEdited, setIsEdited }) {
       <Header />
       <StBGContainer>
         <StDetailContainer>
-          <h4>{`To. ${selectedLetter?.writedTo}`}</h4>
-          {isEdited ? (
-            <textarea
-              // ref={textAreaRef}
-              autoFocus
-              required
-              autoCorrect="off"
-              id="textarea"
-              name="textarea"
-              rows={5}
-              // maxLength={CONTENT_LIMIT}
-              // onChange={textChangeHandler}
-            >
-              {selectedLetter?.content}
-            </textarea>
+          <h4>{`To. ${selectedLetter.writedTo}`}</h4>
+          {isEditing ? (
+            <StTextareaContainer>
+              <textarea
+                ref={textareaRef}
+                autoFocus
+                required
+                value={textareaValue}
+                autoCorrect="off"
+                id="textarea"
+                name="textarea"
+                rows={3}
+                maxLength={TEXTAREA_LENGTH_LIMIT}
+                onChange={textareaChangeHandler}
+              >
+                {selectedLetter.content}
+              </textarea>
+              <StMaxLengthIndicator
+                $isMax={textareaValue.length < TEXTAREA_LENGTH_LIMIT}
+              >
+                {textareaValue.length}/{TEXTAREA_LENGTH_LIMIT}
+              </StMaxLengthIndicator>
+            </StTextareaContainer>
           ) : (
-            <p>{selectedLetter?.content}</p>
+            <p>{selectedLetter.content}</p>
           )}
-          <StDetailInfo>
+          <StDetailInfoWrapper>
             <img
-              src={selectedLetter?.avatar}
-              alt={selectedLetter?.nickname}
+              src={selectedLetter.avatar}
+              alt={selectedLetter.nickname}
               width="199px"
             />
-            <h3>{selectedLetter?.nickname}</h3>
+            <h3>{selectedLetter.nickname}</h3>
             <p>
-              {dayjs(selectedLetter?.createdAt).format(
-                "YYYY년 MM월 DD일 hh:mm"
-              )}{" "}
-              에 작성
-              <span>2023년 11월 23일 21:23 에 편집됨</span>
+              {dayjs(selectedLetter.createdAt).format(
+                "YYYY년 M월 D일 hh:mm에 작성"
+              )}
             </p>
-          </StDetailInfo>
+            {setEditedDate()}
+          </StDetailInfoWrapper>
         </StDetailContainer>
-        {isEdited ? (
+        {isEditing ? (
           <StBtnContainer>
-            <button>수정 완료</button>
-            <button onClick={() => setIsEdited(false)}>취소</button>
+            <button onClick={editCompletedBtnClickHandler}>수정 완료</button>
+            <button onClick={editCancelBtnClickHandler}>취소</button>
           </StBtnContainer>
         ) : (
           <StBtnContainer>
