@@ -40,6 +40,7 @@ function Header({ selectedMember, setSelectedMember, isEditing }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // 현재 위치
   const curPage = location.pathname.includes("detail") ? "detail" : "home";
 
   const selectButtonHandler = (e) => {

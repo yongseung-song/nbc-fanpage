@@ -56,6 +56,7 @@ function Home({
       const storageData = JSON.parse(localStorage.getItem("letters"));
       setLetters(storageData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
