@@ -148,10 +148,13 @@ function Detail({ letters, setLetters, isEditing, setIsEditing }) {
   };
 
   const editCompletedBtnClickHandler = (e) => {
-    updateLetter(textareaValue);
-    setIsEditing(false);
+    if (selectedLetter.content === textareaValue) {
+      alert("수정 사항이 없습니다.");
+    } else {
+      updateLetter(textareaValue);
+      setIsEditing(false);
+    }
   };
-
   const editCancelBtnClickHandler = () => {
     setIsEditing(false);
   };
