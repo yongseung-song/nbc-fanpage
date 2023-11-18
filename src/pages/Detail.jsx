@@ -1,9 +1,10 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import styled from "styled-components";
+import { Context } from "context/Context";
 
 const TEXTAREA_LENGTH_LIMIT = 100;
 
@@ -97,8 +98,9 @@ const StBtnContainer = styled.div`
   }
 `;
 
-function Detail({ letters, setLetters, isEditing, setIsEditing }) {
+function Detail() {
   const [textareaValue, setTextareaValue] = useState("");
+  const { letters, setLetters, isEditing, setIsEditing } = useContext(Context);
   const params = useParams();
   const navigate = useNavigate();
   const textareaRef = useRef();

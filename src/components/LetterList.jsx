@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Letter from "./Letter";
 import styled from "styled-components";
+import { Context } from "context/Context";
 
 const StLetterListContainer = styled.div`
   width: 100%;
@@ -11,10 +12,9 @@ const StLetterListContainer = styled.div`
   /* flex-wrap: no-wrap; */
 `;
 
-function LetterList({ letters, selectedMember }) {
-  // console.log(letters);
+function LetterList() {
+  const { letters, selectedMember } = useContext(Context);
   const letterEntries = Object.entries(letters).reverse();
-
   const filterLetters = () => {
     return letterEntries.filter(
       (letter) => letter[1].writedTo === selectedMember

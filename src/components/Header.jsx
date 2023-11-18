@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import bannerBg from "../assets/bannerBg.png";
 import bannerLogo from "../assets/bannerLogo.png";
 import { membersMap, members } from "pages/Home";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Context } from "context/Context";
 
 const StHeader = styled.div`
   background: url(${bannerLogo}), url(${bannerBg});
@@ -36,7 +37,8 @@ const StNavBtn = styled.button`
     background-color: #ecebca;
   }
 `;
-function Header({ selectedMember, setSelectedMember, isEditing }) {
+function Header() {
+  const data = useContext(Context);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,12 +48,12 @@ function Header({ selectedMember, setSelectedMember, isEditing }) {
   const selectButtonHandler = (e) => {
     e.preventDefault();
     const id = +e.target.id;
-    setSelectedMember(membersMap.get(id));
+    data.setSelectedMember(membersMap.get(id));
   };
 
   const homeButtonHandler = (e) => {
     e.preventDefault();
-    if (isEditing) {
+    if (data.isEditing) {
       if (
         window.confirm("수정중인 내용이 사라집니다. 홈으로 이동하시겠습니까?")
       ) {
@@ -69,7 +71,7 @@ function Header({ selectedMember, setSelectedMember, isEditing }) {
           members.map((member, idx) => {
             return (
               <StNavBtn
-                $isSelected={member === selectedMember}
+                $isSelected={member === data.selectedMember}
                 id={idx}
                 key={idx}
                 onClick={selectButtonHandler}

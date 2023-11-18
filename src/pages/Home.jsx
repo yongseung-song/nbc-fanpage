@@ -4,8 +4,9 @@ import LetterForm from "components/LetterForm";
 import LetterList from "components/LetterList";
 import bgBottom from "../assets/bgbottom.png";
 import bgWall from "../assets/bgwall.png";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
+import { Context } from "context/Context";
 
 export const members = ["이장원", "신재평"];
 export const membersMap = new Map(members.entries());
@@ -31,55 +32,42 @@ const StLetterContainer = styled.div`
   /* background-color: #f0f0f0; */
 `;
 
-function Home({
-  selectedMember,
-  setSelectedMember,
-  letters,
-  setLetters,
-  isEditing,
-}) {
+function Home() {
+  const data = useContext(Context);
+
   useEffect(() => {
     if (!localStorage.getItem("letters")) {
       fetch("fakeData.json")
         .then((res) => res.json())
-        .then((data) =>
-          data.forEach((item) => {
-            setLetters((prevState) => ({
+        .then((result) =>
+          result.forEach((item) => {
+            data.setLetters((prevState) => ({
               ...prevState,
               [item.id]: { ...item, editedAt: "" },
             }));
           })
         );
-      const stringifiedLetterMap = JSON.stringify(letters);
+      const stringifiedLetterMap = JSON.stringify(data.letters);
       localStorage.setItem("letters", stringifiedLetterMap);
     } else {
       const storageData = JSON.parse(localStorage.getItem("letters"));
-      setLetters(storageData);
+      data.setLetters(storageData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const stringifiedLetterMap = JSON.stringify(letters);
+    const stringifiedLetterMap = JSON.stringify(data.letters);
     localStorage.setItem("letters", stringifiedLetterMap);
-  }, [letters]);
+  }, [data.letters]);
 
   return (
     <div>
-      <Header
-        selectedMember={selectedMember}
-        setSelectedMember={setSelectedMember}
-        isEditing={isEditing}
-      />
+      <Header />
       <StBGContainer>
         <StLetterContainer>
-          <LetterForm
-            letters={letters}
-            setLetters={setLetters}
-            selectedMember={selectedMember}
-            setSelectedMember={setSelectedMember}
-          />
-          <LetterList letters={letters} selectedMember={selectedMember} />
+          <LetterForm />
+          <LetterList />
         </StLetterContainer>
       </StBGContainer>
       {/* <Outlet /> */}
