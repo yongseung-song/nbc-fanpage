@@ -1,11 +1,10 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import styled from "styled-components";
 
-const defaultImage = "http://www.peppertones.net/P_%20copy.jpg";
 const TEXTAREA_LENGTH_LIMIT = 100;
 
 const StBGContainer = styled.div`

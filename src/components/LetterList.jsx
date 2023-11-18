@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Letter from "./Letter";
 import styled from "styled-components";
 
