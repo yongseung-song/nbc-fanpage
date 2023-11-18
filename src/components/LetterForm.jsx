@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
+import { Context } from "context/Context";
 
 const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
 const NICKNAME_LIMIT = 20;
@@ -86,21 +87,17 @@ const StMaxLengthIndicator = styled.span`
   color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
 `;
 
-function LetterForm({
-  letters,
-  setLetters,
-  selectedMember,
-  setSelectedMember,
-}) {
+function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const data = useContext(Context);
   const inputRef = useRef();
   const textareaRef = useRef();
   const selectRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [selectedMember, letters]);
+  }, [data.selectedMember, data.letters]);
 
   const letterSubmitHandler = (e) => {
     e.preventDefault();
@@ -115,12 +112,12 @@ function LetterForm({
         avatar: DEFAULT_IMG_URL,
       };
 
-      setLetters((prevState) => ({
+      data.setLetters((prevState) => ({
         ...prevState,
         [submittedLetter.id]: { ...submittedLetter },
       }));
 
-      setSelectedMember(selectRef.current.value);
+      data.setSelectedMember(selectRef.current.value);
 
       setTextareaValue("");
       setInputValue("");
@@ -178,7 +175,7 @@ function LetterForm({
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={selectedMember}
+            defaultValue={data.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>
