@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Detail from "../pages/Detail";
-import Schedule from "../pages/Schedule";
 
 function Router() {
   const [selectedMember, setSelectedMember] = useState("이장원");
   const [letters, setLetters] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <BrowserRouter>
       <Routes>
@@ -18,14 +18,21 @@ function Router() {
               setSelectedMember={setSelectedMember}
               letters={letters}
               setLetters={setLetters}
+              isEditing={isEditing}
             />
           }
         />
         <Route
           path="details/:id"
-          element={<Detail letters={letters} setLetters={setLetters} />}
+          element={
+            <Detail
+              letters={letters}
+              setLetters={setLetters}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+            />
+          }
         />
-        <Route path="schedule" element={<Schedule />} />
       </Routes>
     </BrowserRouter>
   );

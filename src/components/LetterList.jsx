@@ -11,7 +11,7 @@ const StLetterListContainer = styled.div`
   /* flex-wrap: no-wrap; */
 `;
 
-function LetterList({ letters, setLetters, selectedMember }) {
+function LetterList({ letters, selectedMember }) {
   // console.log(letters);
   const letterEntries = Object.entries(letters).reverse();
 

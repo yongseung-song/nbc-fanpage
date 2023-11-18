@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-// TODO 사용하지 않는 변수 없애기
-import { members } from "pages/Home";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 

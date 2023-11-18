@@ -36,6 +36,8 @@ const StDetailContainer = styled.div`
 const StTextareaContainer = styled.div`
   position: relative;
   textarea {
+    font-size: 1.2rem;
+    font-style: italic;
     border: none;
     background-color: #eee;
   }
@@ -96,11 +98,9 @@ const StBtnContainer = styled.div`
   }
 `;
 
-function Detail({ letters, setLetters }) {
-  const [isEditing, setIsEditing] = useState(false);
+function Detail({ letters, setLetters, isEditing, setIsEditing }) {
   const [textareaValue, setTextareaValue] = useState("");
   const params = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
   const textareaRef = useRef();
 
@@ -145,12 +145,10 @@ function Detail({ letters, setLetters }) {
 
   const editBtnClickHandler = (e) => {
     setTextareaValue(selectedLetter.content);
-    // setIsEditing((prevState) => !prevState);
     setIsEditing(true);
   };
 
   const editCompletedBtnClickHandler = (e) => {
-    console.log(dayjs().toJSON());
     updateLetter(textareaValue);
     setIsEditing(false);
   };
@@ -167,7 +165,6 @@ function Detail({ letters, setLetters }) {
       setTimeout(() => navigate("/"), 10);
     }
   };
-  console.log(isEditing);
   const setEditedDate = () => {
     return (
       <span>

@@ -4,9 +4,7 @@ import LetterForm from "components/LetterForm";
 import LetterList from "components/LetterList";
 import bgBottom from "../assets/bgbottom.png";
 import bgWall from "../assets/bgwall.png";
-import bannerBg from "../assets/bannerBg.png";
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 export const members = ["이장원", "신재평"];
@@ -33,7 +31,13 @@ const StLetterContainer = styled.div`
   /* background-color: #f0f0f0; */
 `;
 
-function Home({ selectedMember, setSelectedMember, letters, setLetters }) {
+function Home({
+  selectedMember,
+  setSelectedMember,
+  letters,
+  setLetters,
+  isEditing,
+}) {
   useEffect(() => {
     if (!localStorage.getItem("letters")) {
       fetch("fakeData.json")
@@ -52,7 +56,6 @@ function Home({ selectedMember, setSelectedMember, letters, setLetters }) {
       const storageData = JSON.parse(localStorage.getItem("letters"));
       setLetters(storageData);
     }
-    // localStorage.setItem()
   }, []);
 
   useEffect(() => {
@@ -65,6 +68,7 @@ function Home({ selectedMember, setSelectedMember, letters, setLetters }) {
       <Header
         selectedMember={selectedMember}
         setSelectedMember={setSelectedMember}
+        isEditing={isEditing}
       />
       <StBGContainer>
         <StLetterContainer>
@@ -74,11 +78,7 @@ function Home({ selectedMember, setSelectedMember, letters, setLetters }) {
             selectedMember={selectedMember}
             setSelectedMember={setSelectedMember}
           />
-          <LetterList
-            letters={letters}
-            setLetters={setLetters}
-            selectedMember={selectedMember}
-          />
+          <LetterList letters={letters} selectedMember={selectedMember} />
         </StLetterContainer>
       </StBGContainer>
       {/* <Outlet /> */}

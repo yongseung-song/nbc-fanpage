@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import bannerBg from "../assets/bannerBg.png";
 import bannerLogo from "../assets/bannerLogo.png";
-import bgRightImg from "../assets/pyung.png";
-import bgLeftImg from "../assets/jang.png";
 import { membersMap, members } from "pages/Home";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -12,7 +10,6 @@ const StHeader = styled.div`
   background-position: 50% 0%, 50% 50%;
   background-size: auto 140px, 100% 204px;
   background-repeat: no-repeat;
-  /* background-blend-mode: luminosity; */
   height: 200px;
   display: flex;
   flex-direction: row;
@@ -39,21 +36,31 @@ const StNavBtn = styled.button`
     background-color: #ecebca;
   }
 `;
-function Header({ selectedMember, setSelectedMember }) {
+function Header({ selectedMember, setSelectedMember, isEditing }) {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const curPage = location.pathname.includes("detail") ? "detail" : "home";
+
   const selectButtonHandler = (e) => {
     e.preventDefault();
     const id = +e.target.id;
     setSelectedMember(membersMap.get(id));
-    // console.log(e.target.id);
   };
+
   const homeButtonHandler = (e) => {
     e.preventDefault();
-    navigate("/");
+    if (isEditing) {
+      if (
+        window.confirm("수정중인 내용이 사라집니다. 홈으로 이동하시겠습니까?")
+      ) {
+        navigate("/");
+      }
+    } else {
+      navigate("/");
+    }
   };
-  const curPage = location.pathname.includes("detail") ? "detail" : "home";
-  // console.log(curPage);
+
   return (
     <>
       <StHeader>
@@ -79,5 +86,4 @@ function Header({ selectedMember, setSelectedMember }) {
     </>
   );
 }
-// HMM 디테일페이지에 나오는 StNavBtn에 $isSelected 쓰는 게 맞나?
 export default Header;
