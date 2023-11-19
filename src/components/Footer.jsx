@@ -20,7 +20,6 @@ const StFooter = styled.footer`
 function Footer() {
   return (
     <StFooter>
-      {/* <p>노래하라!</p> */}
       <p>Copyright ©2023 Yongseung Song.</p>
     </StFooter>
   );

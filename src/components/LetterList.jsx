@@ -9,7 +9,6 @@ const StLetterListContainer = styled.div`
   flex-direction: column;
   overflow: scroll;
   padding-top: 6px;
-  /* flex-wrap: no-wrap; */
 `;
 
 function LetterList() {
