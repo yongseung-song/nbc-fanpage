@@ -167,7 +167,7 @@ function Detail() {
       const updatedLetters = { ...letters };
       delete updatedLetters[params.id];
       setLetters(updatedLetters);
-      setTimeout(() => navigate("/"), 10);
+      setTimeout(() => navigate("/"), 0);
     }
   };
   const setEditedDate = () => {
