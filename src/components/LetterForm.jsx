@@ -93,7 +93,7 @@ const StMaxLengthIndicator = styled.span`
 function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const data = useContext(Context);
+  // const data = useContext(Context);
   // HMM state => state.letters 로 받아와서 사용하는게 맞나?
   // HMM state => state.letters.letters 로 state를 직접 받아와서 사용하는게 맞나?
   // useSelector, useDispatch
@@ -187,7 +187,7 @@ function LetterForm() {
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={data.selectedMember}
+            defaultValue={member.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>

@@ -125,15 +125,18 @@ function Detail() {
   }, []);
 
   useEffect(() => {
-    const stringifiedLetterMap = JSON.stringify(letters.letters);
-    localStorage.setItem("letters", stringifiedLetterMap);
+    // const stringifiedLetterMap = JSON.stringify(letters.letters);
+    // localStorage.setItem("letters", stringifiedLetterMap);
     // navigate("/");
   }, [letters.letters]);
 
-  const selectedLetter = useMemo(
-    () => ({ ...letters.letters?.[params.id] }),
-    [letters.letters]
-  );
+  // const selectedLetter = useMemo(
+  //   () => ({ ...letters.letters?.[params.id] }),
+  //   [letters.letters]
+  // );
+  const selectedLetter = { ...letters.letters?.[params.id] };
+  console.log(selectedLetter);
+
   const updateLetter = (updatedContent, updatedDate) => {
     dispatch(
       editLetter({
@@ -159,8 +162,8 @@ function Detail() {
   };
 
   const editBtnClickHandler = (e) => {
-    setTextareaValue(selectedLetter.content);
     dispatch(editMode(true));
+    setTextareaValue(selectedLetter.content);
   };
 
   const editCompletedBtnClickHandler = (e) => {
@@ -221,9 +224,7 @@ function Detail() {
                 rows={3}
                 maxLength={TEXTAREA_LENGTH_LIMIT}
                 onChange={textareaChangeHandler}
-              >
-                {selectedLetter?.content}
-              </textarea>
+              />
               <StMaxLengthIndicator
                 $isMax={textareaValue.length < TEXTAREA_LENGTH_LIMIT}
               >
