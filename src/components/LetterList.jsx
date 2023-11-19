@@ -23,9 +23,15 @@ function LetterList() {
   return (
     <StLetterListContainer>
       <ul>
-        {filterLetters().map((item) => {
-          return <Letter key={item[0]} letter={item[1]} />;
-        })}
+        {filterLetters().length ? (
+          filterLetters().map((item) => {
+            return <Letter key={item[0]} letter={item[1]} />;
+          })
+        ) : (
+          <StEmptyListContainer>
+            <p>{selectedMember}에게 남겨진 팬레터가 없습니다.</p>
+          </StEmptyListContainer>
+        )}
       </ul>
     </StLetterListContainer>
   );
