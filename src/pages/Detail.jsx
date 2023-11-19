@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { Context } from "context/Context";
+import { useDispatch, useSelector } from "react-redux";
+import { editMode, setLetter } from "redux/modules/letters";
 
 const TEXTAREA_LENGTH_LIMIT = 100;
 
@@ -100,7 +102,10 @@ const StBtnContainer = styled.div`
 
 function Detail() {
   const [textareaValue, setTextareaValue] = useState("");
-  const { letters, setLetters, isEditing, setIsEditing } = useContext(Context);
+  const letters = useSelector((state) => state.letters);
+  const member = useSelector((state) => state.member);
+  const dispatch = useDispatch();
+  // const { letters, setLetters, isEditing, setIsEditing } = useContext(Context);
   const params = useParams();
   const navigate = useNavigate();
   const textareaRef = useRef();
@@ -111,34 +116,43 @@ function Detail() {
       navigate("/");
     } else {
       const storageData = JSON.parse(localStorage.getItem("letters"));
-      setLetters(storageData);
+      dispatch(setLetter(storageData));
     }
     return () => {
       // 무슨 일이 생겨서 Home 으로 이동하면 isEditing
-      setIsEditing(false);
+      dispatch(editMode(false));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const stringifiedLetterMap = JSON.stringify(letters);
+    const stringifiedLetterMap = JSON.stringify(letters.letters);
     localStorage.setItem("letters", stringifiedLetterMap);
     // navigate("/");
-  }, [letters]);
+  }, [letters.letters]);
 
   const selectedLetter = useMemo(
-    () => ({ ...letters[params.id] }),
-    [letters, params.id]
+    () => ({ ...letters.letters[params.id] }),
+    [letters.letters]
   );
   const updateLetter = (updatedContent, updatedDate) => {
-    setLetters((prevLetters) => ({
-      ...prevLetters,
-      [params.id]: {
-        ...selectedLetter,
-        content: updatedContent,
-        editedAt: dayjs().toJSON(),
-      },
-    }));
+    dispatch(
+      setLetter({
+        [params.id]: {
+          ...selectedLetter,
+          content: updatedContent,
+          editedAt: dayjs().toJSON(),
+        },
+      })
+    );
+    // setLetters((prevLetters) => ({
+    //   ...prevLetters,
+    //   [params.id]: {
+    //     ...selectedLetter,
+    //     content: updatedContent,
+    //     editedAt: dayjs().toJSON(),
+    //   },
+    // }));
   };
 
   const textareaChangeHandler = (e) => {
@@ -147,7 +161,7 @@ function Detail() {
 
   const editBtnClickHandler = (e) => {
     setTextareaValue(selectedLetter.content);
-    setIsEditing(true);
+    dispatch(editMode(true));
   };
 
   const editCompletedBtnClickHandler = (e) => {
@@ -155,18 +169,18 @@ function Detail() {
       alert("수정 사항이 없습니다.");
     } else {
       updateLetter(textareaValue);
-      setIsEditing(false);
+      dispatch(editMode(false));
     }
   };
   const editCancelBtnClickHandler = () => {
-    setIsEditing(false);
+    dispatch(editMode(false));
   };
 
   const deleteBtnClickHandler = (e) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      const updatedLetters = { ...letters };
+      const updatedLetters = { ...letters.letters };
       delete updatedLetters[params.id];
-      setLetters(updatedLetters);
+      dispatch(setLetter(updatedLetters));
       setTimeout(() => navigate("/"), 10);
     }
   };
@@ -194,8 +208,8 @@ function Detail() {
       <Header />
       <StBGContainer>
         <StDetailContainer>
-          <h4>{`To. ${selectedLetter.writedTo}`}</h4>
-          {isEditing ? (
+          <h4>{`To. ${selectedLetter?.writedTo}`}</h4>
+          {letters.isEditing ? (
             <StTextareaContainer>
               <textarea
                 ref={textareaRef}
@@ -209,7 +223,7 @@ function Detail() {
                 maxLength={TEXTAREA_LENGTH_LIMIT}
                 onChange={textareaChangeHandler}
               >
-                {selectedLetter.content}
+                {selectedLetter?.content}
               </textarea>
               <StMaxLengthIndicator
                 $isMax={textareaValue.length < TEXTAREA_LENGTH_LIMIT}
@@ -218,24 +232,24 @@ function Detail() {
               </StMaxLengthIndicator>
             </StTextareaContainer>
           ) : (
-            <p>{selectedLetter.content}</p>
+            <p>{selectedLetter?.content}</p>
           )}
           <StDetailInfoWrapper>
             <img
-              src={selectedLetter.avatar}
-              alt={selectedLetter.nickname}
+              src={selectedLetter?.avatar}
+              alt={selectedLetter?.nickname}
               width="199px"
             />
-            <h3>{selectedLetter.nickname}</h3>
+            <h3>{selectedLetter?.nickname}</h3>
             <p>
-              {dayjs(selectedLetter.createdAt).format(
+              {dayjs(selectedLetter?.createdAt).format(
                 "YYYY년 M월 D일 hh:mm에 작성"
               )}
             </p>
             {setEditedDate()}
           </StDetailInfoWrapper>
         </StDetailContainer>
-        {isEditing ? (
+        {letters.isEditing ? (
           <StBtnContainer>
             <button onClick={editCompletedBtnClickHandler}>수정 완료</button>
             <button onClick={editCancelBtnClickHandler}>취소</button>

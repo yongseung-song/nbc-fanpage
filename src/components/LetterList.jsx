@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Letter from "./Letter";
 import styled from "styled-components";
 import { Context } from "context/Context";
+import { useSelector } from "react-redux";
 
 const StLetterListContainer = styled.div`
   width: 100%;
@@ -13,11 +14,15 @@ const StLetterListContainer = styled.div`
 `;
 
 function LetterList() {
-  const { letters, selectedMember } = useContext(Context);
-  const letterEntries = Object.entries(letters).reverse();
+  const letters = useSelector((state) => state.letters);
+  const member = useSelector((state) => state.member);
+  // const { letters, selectedMember } = useContext(Context);
+
+  const letterEntries = Object.entries(letters.letters).reverse();
+  console.log(letterEntries);
   const filterLetters = () => {
     return letterEntries.filter(
-      (letter) => letter[1].writedTo === selectedMember
+      (letter) => letter[1].writedTo === member.selectedMember
     );
   };
 

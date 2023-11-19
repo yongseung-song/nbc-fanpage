@@ -7,6 +7,8 @@ import bgWall from "../assets/bgwall.png";
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Context } from "context/Context";
+import { useDispatch, useSelector } from "react-redux";
+import { addLetter, setLetter } from "redux/modules/letters";
 
 export const members = ["이장원", "신재평"];
 export const membersMap = new Map(members.entries());
@@ -33,7 +35,9 @@ const StLetterContainer = styled.div`
 `;
 
 function Home() {
-  const data = useContext(Context);
+  // const data = useContext(Context);
+  const letters = useSelector((state) => state.letters);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!localStorage.getItem("letters")) {
@@ -41,25 +45,22 @@ function Home() {
         .then((res) => res.json())
         .then((result) =>
           result.forEach((item) => {
-            data.setLetters((prevState) => ({
-              ...prevState,
-              [item.id]: { ...item, editedAt: "" },
-            }));
+            dispatch(addLetter(item));
           })
         );
-      const stringifiedLetterMap = JSON.stringify(data.letters);
+      const stringifiedLetterMap = JSON.stringify(letters.letters);
       localStorage.setItem("letters", stringifiedLetterMap);
     } else {
       const storageData = JSON.parse(localStorage.getItem("letters"));
-      data.setLetters(storageData);
+      dispatch(setLetter(storageData));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const stringifiedLetterMap = JSON.stringify(data.letters);
+    const stringifiedLetterMap = JSON.stringify(letters.letters);
     localStorage.setItem("letters", stringifiedLetterMap);
-  }, [data.letters]);
+  }, [letters.letters]);
 
   return (
     <div>

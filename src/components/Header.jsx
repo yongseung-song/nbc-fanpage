@@ -5,6 +5,8 @@ import bannerLogo from "../assets/bannerLogo.png";
 import { membersMap, members } from "pages/Home";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "context/Context";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedMember } from "redux/modules/member";
 
 const StHeader = styled.div`
   background: url(${bannerLogo}), url(${bannerBg});
@@ -38,7 +40,10 @@ const StNavBtn = styled.button`
   }
 `;
 function Header() {
-  const data = useContext(Context);
+  // const data = useContext(Context);
+  const member = useSelector((state) => state.member);
+  const letters = useSelector((state) => state.letters);
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -48,12 +53,12 @@ function Header() {
   const selectButtonHandler = (e) => {
     e.preventDefault();
     const id = +e.target.id;
-    data.setSelectedMember(membersMap.get(id));
+    dispatch(setSelectedMember(membersMap.get(id)));
   };
 
   const homeButtonHandler = (e) => {
     e.preventDefault();
-    if (data.isEditing) {
+    if (letters.isEditing) {
       if (
         window.confirm("수정중인 내용이 사라집니다. 홈으로 이동하시겠습니까?")
       ) {
@@ -68,15 +73,15 @@ function Header() {
     <>
       <StHeader>
         {curPage === "home" ? (
-          members.map((member, idx) => {
+          members.map((item, idx) => {
             return (
               <StNavBtn
-                $isSelected={member === data.selectedMember}
+                $isSelected={item === member.selectedMember}
                 id={idx}
                 key={idx}
                 onClick={selectButtonHandler}
               >
-                {member}
+                {item}
               </StNavBtn>
             );
           })

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 import { Context } from "context/Context";
+import { useDispatch, useSelector } from "react-redux";
+import { addLetter } from "redux/modules/letters";
+import { setSelectedMember } from "redux/modules/member";
 
 const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
 const NICKNAME_LIMIT = 20;
@@ -90,14 +93,17 @@ const StMaxLengthIndicator = styled.span`
 function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const data = useContext(Context);
+  const letters = useSelector((state) => state.letters);
+  const member = useSelector((state) => state.member);
+  const dispatch = useDispatch();
+  // const data = useContext(Context);
   const inputRef = useRef();
   const textareaRef = useRef();
   const selectRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [data.selectedMember, data.letters]);
+  }, [member.selectedMember, letters.letters]);
 
   const letterSubmitHandler = (e) => {
     e.preventDefault();
@@ -112,12 +118,13 @@ function LetterForm() {
         avatar: DEFAULT_IMG_URL,
       };
 
-      data.setLetters((prevState) => ({
-        ...prevState,
-        [submittedLetter.id]: { ...submittedLetter },
-      }));
-
-      data.setSelectedMember(selectRef.current.value);
+      dispatch(addLetter(submittedLetter));
+      // data.setLetters((prevState) => ({
+      //   ...prevState,
+      //   [submittedLetter.id]: { ...submittedLetter },
+      // }));
+      dispatch(setSelectedMember(selectRef.current.value));
+      // data.setSelectedMember(selectRef.current.value);
 
       setTextareaValue("");
       setInputValue("");
@@ -175,7 +182,7 @@ function LetterForm() {
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={data.selectedMember}
+            defaultValue={member.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>
