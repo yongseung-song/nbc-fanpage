@@ -4,11 +4,10 @@ import LetterForm from "components/LetterForm";
 import LetterList from "components/LetterList";
 import bgBottom from "../assets/bgbottom.png";
 import bgWall from "../assets/bgwall.png";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Context } from "context/Context";
 import { useDispatch, useSelector } from "react-redux";
-import { addLetter, setLetter } from "redux/modules/letters";
+import { addLetters, setLetters } from "redux/modules/letters";
 
 export const members = ["이장원", "신재평"];
 export const membersMap = new Map(members.entries());
@@ -29,7 +28,6 @@ const StLetterContainer = styled.div`
 `;
 
 function Home() {
-  // const data = useContext(Context);
   const letters = useSelector((state) => state.letters);
   const dispatch = useDispatch();
 
@@ -40,14 +38,14 @@ function Home() {
         .then((res) => res.json())
         .then((result) =>
           result.forEach((item) => {
-            dispatch(addLetter(item));
+            dispatch(addLetters(item));
           })
         );
       const stringifiedLetterMap = JSON.stringify(letters.letters);
       localStorage.setItem("letters", stringifiedLetterMap);
     } else {
       const storageData = JSON.parse(localStorage.getItem("letters"));
-      dispatch(setLetter(storageData));
+      dispatch(setLetters(storageData));
     }
   }, []);
 
@@ -65,7 +63,6 @@ function Home() {
           <LetterList />
         </StLetterContainer>
       </StBGContainer>
-      {/* <Outlet /> */}
       <Footer />
     </div>
   );

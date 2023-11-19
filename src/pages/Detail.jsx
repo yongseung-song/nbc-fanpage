@@ -1,12 +1,16 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { Context } from "context/Context";
 import { useDispatch, useSelector } from "react-redux";
-import { editLetter, editMode, setLetter } from "redux/modules/letters";
+import {
+  deleteLetters,
+  editLetters,
+  editMode,
+  setLetters,
+} from "redux/modules/letters";
 
 const TEXTAREA_LENGTH_LIMIT = 100;
 
@@ -102,10 +106,8 @@ const StBtnContainer = styled.div`
 
 function Detail() {
   const [textareaValue, setTextareaValue] = useState("");
-  const letters = useSelector((state) => state.letters);
-  const member = useSelector((state) => state.member);
+  const { letters, isEditing } = useSelector((state) => state.letters);
   const dispatch = useDispatch();
-  // const { letters, setLetters, isEditing, setIsEditing } = useContext(Context);
   const params = useParams();
   const navigate = useNavigate();
   const textareaRef = useRef();
@@ -116,7 +118,7 @@ function Detail() {
       navigate("/");
     } else {
       const storageData = JSON.parse(localStorage.getItem("letters"));
-      dispatch(setLetter(storageData));
+      dispatch(setLetters(storageData));
     }
     return () => {
       // 무슨 일이 생겨서 Home 으로 이동하면 isEditing
@@ -125,36 +127,23 @@ function Detail() {
   }, []);
 
   useEffect(() => {
-    // const stringifiedLetterMap = JSON.stringify(letters.letters);
-    // localStorage.setItem("letters", stringifiedLetterMap);
-    // navigate("/");
-  }, [letters.letters]);
+    const stringifiedLetterMap = JSON.stringify(letters);
+    localStorage.setItem("letters", stringifiedLetterMap);
+  }, [letters]);
 
-  // const selectedLetter = useMemo(
-  //   () => ({ ...letters.letters?.[params.id] }),
-  //   [letters.letters]
-  // );
-  const selectedLetter = { ...letters.letters?.[params.id] };
-  console.log(selectedLetter);
+  const selectedLetter = { ...letters?.[params.id] };
 
-  const updateLetter = (updatedContent, updatedDate) => {
+  const updateLetter = (updatedContent) => {
     dispatch(
-      editLetter({
+      editLetters({
         [params.id]: {
           ...selectedLetter,
           content: updatedContent,
           editedAt: dayjs().toJSON(),
         },
+        id: params.id,
       })
     );
-    // setLetters((prevLetters) => ({
-    //   ...prevLetters,
-    //   [params.id]: {
-    //     ...selectedLetter,
-    //     content: updatedContent,
-    //     editedAt: dayjs().toJSON(),
-    //   },
-    // }));
   };
 
   const textareaChangeHandler = (e) => {
@@ -180,10 +169,8 @@ function Detail() {
 
   const deleteBtnClickHandler = (e) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      const updatedLetters = { ...letters.letters };
-      delete updatedLetters[params.id];
-      dispatch(setLetter(updatedLetters));
-      setTimeout(() => navigate("/"), 10);
+      dispatch(deleteLetters(selectedLetter));
+      setTimeout(() => navigate("/"), 0);
     }
   };
   const setEditedDate = () => {
@@ -211,7 +198,7 @@ function Detail() {
       <StBGContainer>
         <StDetailContainer>
           <h4>{`To. ${selectedLetter?.writedTo}`}</h4>
-          {letters.isEditing ? (
+          {isEditing ? (
             <StTextareaContainer>
               <textarea
                 ref={textareaRef}
@@ -249,7 +236,7 @@ function Detail() {
             {setEditedDate()}
           </StDetailInfoWrapper>
         </StDetailContainer>
-        {letters.isEditing ? (
+        {isEditing ? (
           <StBtnContainer>
             <button onClick={editCompletedBtnClickHandler}>수정 완료</button>
             <button onClick={editCancelBtnClickHandler}>취소</button>

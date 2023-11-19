@@ -13,7 +13,6 @@ const GlobalStyle = createGlobalStyle`
   }
   body * {
     font-family: ${fontFamily};
-    ${"" /* background-color: #f0f0f0; */}
     box-sizing: border-box;
     display: flex;
     flex-direction: column;

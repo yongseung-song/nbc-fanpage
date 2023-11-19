@@ -1,33 +1,30 @@
-import { type } from "@testing-library/user-event/dist/type";
-
 // >>> 액션 타입
 const SET_LETTER = "letters/SET_LETTER";
 const ADD_LETTER = "letters/ADD_LETTER";
 const EDIT_LETTER = "letters/EDIT_LETTER";
 const DELETE_LETTER = "letters/DELETE_LETTER";
-// const ON_EDIT_MODE = "letters/ON_EDIT_MODEG";
 const ON_EDIT_MODE = "letters/ON_EDIT_MODE";
 
 // >>> 액션 크리에이터
-export const setLetter = (payload) => {
+export const setLetters = (payload) => {
   return {
     type: SET_LETTER,
     payload,
   };
 };
-export const addLetter = (payload) => {
+export const addLetters = (payload) => {
   return {
     type: ADD_LETTER,
     payload,
   };
 };
-export const editLetter = (payload) => {
+export const editLetters = (payload) => {
   return {
     type: EDIT_LETTER,
     payload,
   };
 };
-export const deleteLetter = (payload) => {
+export const deleteLetters = (payload) => {
   return {
     type: DELETE_LETTER,
     payload,
@@ -51,6 +48,7 @@ const letters = (state = initialState, action) => {
   switch (action.type) {
     case SET_LETTER:
       return {
+        ...state,
         letters: {
           ...action.payload,
         },
@@ -58,6 +56,7 @@ const letters = (state = initialState, action) => {
 
     case ADD_LETTER:
       return {
+        ...state,
         letters: {
           ...state.letters,
           [action.payload?.id]: { ...action.payload },
@@ -65,13 +64,10 @@ const letters = (state = initialState, action) => {
       };
     case EDIT_LETTER:
       return {
+        ...state,
         letters: {
           ...state.letters,
-          [action.payload?.id]: {
-            ...state.letters[action.payload?.id],
-            content: action.payload?.updatedContent,
-            editedAt: action.payload?.editedAt,
-          },
+          ...action.payload,
         },
       };
     case DELETE_LETTER:
@@ -83,6 +79,7 @@ const letters = (state = initialState, action) => {
       };
     case ON_EDIT_MODE:
       return {
+        ...state,
         isEditing: action.payload,
       };
     default:

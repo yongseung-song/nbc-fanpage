@@ -61,7 +61,6 @@ function Letter({ letter }) {
     const id = letterRef.current.id;
     navigate(`details/${id}`);
   };
-  // console.log(letter);
 
   return (
     <StLetterContainer

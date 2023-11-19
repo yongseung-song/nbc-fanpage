@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
-import { Context } from "context/Context";
 import { useSelector, useDispatch } from "react-redux";
-import { addLetter, setLetter } from "redux/modules/letters";
+import { addLetters } from "redux/modules/letters";
 import { setSelectedMember } from "redux/modules/member";
 
 const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
@@ -93,10 +92,6 @@ const StMaxLengthIndicator = styled.span`
 function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-  // const data = useContext(Context);
-  // HMM state => state.letters 로 받아와서 사용하는게 맞나?
-  // HMM state => state.letters.letters 로 state를 직접 받아와서 사용하는게 맞나?
-  // useSelector, useDispatch
   const letters = useSelector((state) => state.letters);
   const member = useSelector((state) => state.member);
   const dispatch = useDispatch();
@@ -122,14 +117,7 @@ function LetterForm() {
         avatar: DEFAULT_IMG_URL,
       };
 
-      // context 코드
-      // data.setLetters((prevState) => ({
-      //   ...prevState,
-      //   [submittedLetter.id]: { ...submittedLetter },
-      // }));
-      // data.setSelectedMember(selectRef.current.value);
-
-      dispatch(addLetter(submittedLetter));
+      dispatch(addLetters(submittedLetter));
       dispatch(setSelectedMember(selectRef.current.value));
 
       setTextareaValue("");
@@ -160,7 +148,6 @@ function LetterForm() {
             maxLength={NICKNAME_LIMIT}
             onChange={textChangeHandler}
           />
-          {/* HMM transient props가 뭐지? 알아보기 */}
           <StMaxLengthIndicator $isMax={inputValue.length < NICKNAME_LIMIT}>
             {inputValue.length}/{NICKNAME_LIMIT}
           </StMaxLengthIndicator>

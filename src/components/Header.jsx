@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import bannerBg from "../assets/bannerBg.png";
 import bannerLogo from "../assets/bannerLogo.png";
 import { membersMap, members } from "pages/Home";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { Context } from "context/Context";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMember } from "redux/modules/member";
 
@@ -40,7 +39,6 @@ const StNavBtn = styled.button`
   }
 `;
 function Header() {
-  // const data = useContext(Context);
   const member = useSelector((state) => state.member);
   const letters = useSelector((state) => state.letters);
   const dispatch = useDispatch();
