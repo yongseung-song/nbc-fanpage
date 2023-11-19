@@ -4,7 +4,7 @@ import bannerBg from "../assets/bannerBg.png";
 import bannerLogo from "../assets/bannerLogo.png";
 import { membersMap, members } from "pages/Home";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Context } from "context/Context";
+// import { Context } from "context/Context";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMember } from "redux/modules/member";
 

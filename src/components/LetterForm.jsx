@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 import { Context } from "context/Context";
-import { useDispatch, useSelector } from "react-redux";
-import { addLetter } from "redux/modules/letters";
+import { useSelector, useDispatch } from "react-redux";
+import { addLetter, setLetter } from "redux/modules/letters";
 import { setSelectedMember } from "redux/modules/member";
 
 const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
@@ -93,10 +93,14 @@ const StMaxLengthIndicator = styled.span`
 function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const data = useContext(Context);
+  // HMM state => state.letters 로 받아와서 사용하는게 맞나?
+  // HMM state => state.letters.letters 로 state를 직접 받아와서 사용하는게 맞나?
+  // useSelector, useDispatch
   const letters = useSelector((state) => state.letters);
   const member = useSelector((state) => state.member);
   const dispatch = useDispatch();
-  // const data = useContext(Context);
+
   const inputRef = useRef();
   const textareaRef = useRef();
   const selectRef = useRef();
@@ -118,18 +122,19 @@ function LetterForm() {
         avatar: DEFAULT_IMG_URL,
       };
 
-      dispatch(addLetter(submittedLetter));
+      // context 코드
       // data.setLetters((prevState) => ({
       //   ...prevState,
       //   [submittedLetter.id]: { ...submittedLetter },
       // }));
-      dispatch(setSelectedMember(selectRef.current.value));
       // data.setSelectedMember(selectRef.current.value);
+
+      dispatch(addLetter(submittedLetter));
+      dispatch(setSelectedMember(selectRef.current.value));
 
       setTextareaValue("");
       setInputValue("");
     } else {
-      // HMM 모달 넣기?
       alert("닉네임과 내용을 입력해주세요.");
     }
   };
@@ -182,7 +187,7 @@ function LetterForm() {
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={member.selectedMember}
+            defaultValue={data.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>

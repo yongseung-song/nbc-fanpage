@@ -122,7 +122,6 @@ function Detail() {
       // 무슨 일이 생겨서 Home 으로 이동하면 isEditing
       dispatch(editMode(false));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
