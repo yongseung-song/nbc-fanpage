@@ -10,6 +10,18 @@ const StLetterListContainer = styled.div`
   padding-top: 6px;
   /* flex-wrap: no-wrap; */
 `;
+const StEmptyListContainer = styled.div`
+  background-color: #fff;
+  padding: 12px;
+  border: 1px solid #0008;
+  border-radius: 12px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  p {
+    text-align: center;
+  }
+`;
 
 function LetterList({ letters, selectedMember }) {
   // console.log(letters);
@@ -24,9 +36,15 @@ function LetterList({ letters, selectedMember }) {
   return (
     <StLetterListContainer>
       <ul>
-        {filterLetters().map((item) => {
-          return <Letter key={item[0]} letter={item[1]} />;
-        })}
+        {filterLetters().length ? (
+          filterLetters().map((item) => {
+            return <Letter key={item[0]} letter={item[1]} />;
+          })
+        ) : (
+          <StEmptyListContainer>
+            <p>{selectedMember}에게 남겨진 팬레터가 없습니다.</p>
+          </StEmptyListContainer>
+        )}
       </ul>
     </StLetterListContainer>
   );
