@@ -16,19 +16,13 @@ const StBGContainer = styled.div`
   background-position: calc(50% + 300px) calc(100% + 20px),
     calc(50% - 335px) 50%;
   background-size: 400px auto, 300px auto, 100% auto;
-  /* background-blend-mode: darken; */
 `;
 const StLetterContainer = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center; */
   height: calc(100vh - 332px);
   margin: 12px auto 0;
   min-width: 200px;
   width: 480px;
   padding-bottom: 28px;
-  /* background-color: #f0f0f0; */
 `;
 
 function Home({
@@ -81,7 +75,6 @@ function Home({
           <LetterList letters={letters} selectedMember={selectedMember} />
         </StLetterContainer>
       </StBGContainer>
-      {/* <Outlet /> */}
       <Footer />
     </div>
   );

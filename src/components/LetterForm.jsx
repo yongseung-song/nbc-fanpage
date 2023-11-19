@@ -125,7 +125,6 @@ function LetterForm({
       setTextareaValue("");
       setInputValue("");
     } else {
-      // HMM 모달 넣기?
       alert("닉네임과 내용을 입력해주세요.");
     }
   };
@@ -151,7 +150,6 @@ function LetterForm({
             maxLength={NICKNAME_LIMIT}
             onChange={textChangeHandler}
           />
-          {/* HMM transient props가 뭐지? 알아보기 */}
           <StMaxLengthIndicator $isMax={inputValue.length < NICKNAME_LIMIT}>
             {inputValue.length}/{NICKNAME_LIMIT}
           </StMaxLengthIndicator>

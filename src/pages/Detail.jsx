@@ -120,7 +120,6 @@ function Detail({ letters, setLetters, isEditing, setIsEditing }) {
   useEffect(() => {
     const stringifiedLetterMap = JSON.stringify(letters);
     localStorage.setItem("letters", stringifiedLetterMap);
-    // navigate("/");
   }, [letters]);
 
   const selectedLetter = useMemo(
