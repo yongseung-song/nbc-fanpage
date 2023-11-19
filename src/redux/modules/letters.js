@@ -80,7 +80,7 @@ const letters = (state = initialState, action) => {
       };
     case ON_EDIT_MODE:
       return {
-        isEditing: (state = action.payload),
+        isEditing: action.payload,
       };
     default:
       return state;
