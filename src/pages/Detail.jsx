@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import styled from "styled-components";
 import { Context } from "context/Context";
 import { useDispatch, useSelector } from "react-redux";
-import { editMode, setLetter } from "redux/modules/letters";
+import { editLetter, editMode, setLetter } from "redux/modules/letters";
 
 const TEXTAREA_LENGTH_LIMIT = 100;
 
@@ -132,12 +132,12 @@ function Detail() {
   }, [letters.letters]);
 
   const selectedLetter = useMemo(
-    () => ({ ...letters.letters[params.id] }),
+    () => ({ ...letters.letters?.[params.id] }),
     [letters.letters]
   );
   const updateLetter = (updatedContent, updatedDate) => {
     dispatch(
-      setLetter({
+      editLetter({
         [params.id]: {
           ...selectedLetter,
           content: updatedContent,
@@ -165,7 +165,7 @@ function Detail() {
   };
 
   const editCompletedBtnClickHandler = (e) => {
-    if (selectedLetter.content === textareaValue) {
+    if (selectedLetter?.content === textareaValue) {
       alert("수정 사항이 없습니다.");
     } else {
       updateLetter(textareaValue);
