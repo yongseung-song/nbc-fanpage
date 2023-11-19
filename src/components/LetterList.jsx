@@ -10,6 +10,18 @@ const StLetterListContainer = styled.div`
   overflow: scroll;
   padding-top: 6px;
 `;
+const StEmptyListContainer = styled.div`
+  background-color: #fff;
+  padding: 12px;
+  border: 1px solid #0008;
+  border-radius: 12px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  p {
+    text-align: center;
+  }
+`;
 
 function LetterList() {
   const { letters, selectedMember } = useContext(Context);
