@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
-import { useSelector, useDispatch } from "react-redux";
-import { addLetters } from "redux/modules/letters";
-import { setSelectedMember } from "redux/modules/member";
 import defaultAvatar from "../assets/avatar.jpg";
 
 const NICKNAME_LIMIT = 20;
@@ -89,20 +86,21 @@ const StMaxLengthIndicator = styled.span`
   color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
 `;
 
-function LetterForm() {
+function LetterForm({
+  letters,
+  setLetters,
+  selectedMember,
+  setSelectedMember,
+}) {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const letters = useSelector((state) => state.letters);
-  const member = useSelector((state) => state.member);
-  const dispatch = useDispatch();
-
   const inputRef = useRef();
   const textareaRef = useRef();
   const selectRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [member.selectedMember, letters.letters]);
+  }, [selectedMember, letters]);
 
   const letterSubmitHandler = (e) => {
     e.preventDefault();
@@ -117,8 +115,12 @@ function LetterForm() {
         avatar: defaultAvatar,
       };
 
-      dispatch(addLetters(submittedLetter));
-      dispatch(setSelectedMember(selectRef.current.value));
+      setLetters((prevState) => ({
+        ...prevState,
+        [submittedLetter.id]: { ...submittedLetter },
+      }));
+
+      setSelectedMember(selectRef.current.value);
 
       setTextareaValue("");
       setInputValue("");
@@ -174,7 +176,7 @@ function LetterForm() {
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={member.selectedMember}
+            defaultValue={selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>
