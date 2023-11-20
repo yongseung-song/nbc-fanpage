@@ -2,8 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-
-const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
+import defaultAvatar from "../assets/avatar.jpg";
 
 const StLetterContainer = styled.li`
   padding: 12px;
@@ -68,7 +67,7 @@ function Letter({ letter }) {
       id={letter?.id}
       onClick={letterClickHandler}
     >
-      <StImg src={letter?.avatar || DEFAULT_IMG_URL} alt={letter?.nickname} />
+      <StImg src={letter?.avatar || defaultAvatar} alt={letter?.nickname} />
       <StLetterContents>
         <div>
           <h3>{letter?.nickname}</h3>
