@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { addLetters } from "redux/modules/letters";
 import { setSelectedMember } from "redux/modules/member";
-import defaultAvatar from "../assets/avatar.jpeg";
+import defaultAvatar from "../assets/avatar.jpg";
 
 const NICKNAME_LIMIT = 20;
 const CONTENT_LIMIT = 100;
