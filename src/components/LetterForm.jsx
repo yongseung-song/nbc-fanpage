@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
 import { Context } from "context/Context";
+import defaultAvatar from "../assets/avatar.jpeg";
 
-const DEFAULT_IMG_URL = "http://www.peppertones.net/P_%20copy.jpg";
 const NICKNAME_LIMIT = 20;
 const CONTENT_LIMIT = 100;
 const BORDER_COLOR = "#0008";
@@ -109,7 +109,7 @@ function LetterForm() {
         nickname: inputRef.current.value,
         content: textareaRef.current.value,
         writedTo: selectRef.current.value,
-        avatar: DEFAULT_IMG_URL,
+        avatar: defaultAvatar,
       };
 
       data.setLetters((prevState) => ({
