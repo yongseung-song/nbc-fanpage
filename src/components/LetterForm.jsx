@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
-import defaultAvatar from "../assets/avatar.jpg";
+import { useSelector, useDispatch } from "react-redux";
+import { addLetters } from "redux/modules/letters";
+import { setSelectedMember } from "redux/modules/member";
+import defaultAvatar from "../assets/avatar.jpeg";
 
 const NICKNAME_LIMIT = 20;
 const CONTENT_LIMIT = 100;
@@ -86,21 +89,20 @@ const StMaxLengthIndicator = styled.span`
   color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
 `;
 
-function LetterForm({
-  letters,
-  setLetters,
-  selectedMember,
-  setSelectedMember,
-}) {
+function LetterForm() {
   const [textareaValue, setTextareaValue] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const letters = useSelector((state) => state.letters);
+  const member = useSelector((state) => state.member);
+  const dispatch = useDispatch();
+
   const inputRef = useRef();
   const textareaRef = useRef();
   const selectRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [selectedMember, letters]);
+  }, [member.selectedMember, letters.letters]);
 
   const letterSubmitHandler = (e) => {
     e.preventDefault();
@@ -115,12 +117,8 @@ function LetterForm({
         avatar: defaultAvatar,
       };
 
-      setLetters((prevState) => ({
-        ...prevState,
-        [submittedLetter.id]: { ...submittedLetter },
-      }));
-
-      setSelectedMember(selectRef.current.value);
+      dispatch(addLetters(submittedLetter));
+      dispatch(setSelectedMember(selectRef.current.value));
 
       setTextareaValue("");
       setInputValue("");
@@ -176,7 +174,7 @@ function LetterForm({
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={selectedMember}
+            defaultValue={member.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>
