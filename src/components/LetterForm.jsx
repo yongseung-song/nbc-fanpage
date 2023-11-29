@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { v4 as uuid } from "uuid";
-import dayjs from "dayjs";
-import { useSelector, useDispatch } from "react-redux";
-import { addLetters } from "redux/modules/letters";
-import { setSelectedMember } from "redux/modules/member";
-import defaultAvatar from "../assets/avatar.jpeg";
+import dayjs from 'dayjs';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addLetters } from 'redux/modules/letters';
+import { setSelectedMember } from 'redux/modules/member';
+import styled from 'styled-components';
+import { v4 as uuid } from 'uuid';
+import defaultAvatar from '../assets/avatar.jpeg';
 
 const NICKNAME_LIMIT = 20;
 const CONTENT_LIMIT = 100;
-const BORDER_COLOR = "#0008";
-const BACKGROUND_COLOR = "#feffd0bf";
+const BORDER_COLOR = '#0008';
+const BACKGROUND_COLOR = '#feffd0bf';
 
 const StLetterFormContainer = styled.div`
   min-width: 200px;
@@ -86,12 +86,12 @@ const StMaxLengthIndicator = styled.span`
   right: 4px;
   font-size: 0.75rem;
   text-align: right;
-  color: ${(props) => (props.$isMax ? "#aaa" : "#f00a")};
+  color: ${(props) => (props.$isMax ? '#aaa' : '#f00a')};
 `;
 
 function LetterForm() {
-  const [textareaValue, setTextareaValue] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [textareaValue, setTextareaValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const letters = useSelector((state) => state.letters);
   const member = useSelector((state) => state.member);
   const dispatch = useDispatch();
@@ -120,10 +120,10 @@ function LetterForm() {
       dispatch(addLetters(submittedLetter));
       dispatch(setSelectedMember(selectRef.current.value));
 
-      setTextareaValue("");
-      setInputValue("");
+      setTextareaValue('');
+      setInputValue('');
     } else {
-      alert("닉네임과 내용을 입력해주세요.");
+      alert('닉네임과 내용을 입력해주세요.');
     }
   };
 
@@ -174,7 +174,7 @@ function LetterForm() {
           <select
             ref={selectRef}
             id="member-select"
-            defaultValue={member.selectedMember}
+            value={member.selectedMember}
             name="member-select"
           >
             <option value="이장원">이장원</option>
