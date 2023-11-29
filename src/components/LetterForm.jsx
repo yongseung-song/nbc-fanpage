@@ -6,7 +6,7 @@ import { addLetters } from 'redux/modules/letters';
 import { setSelectedMember } from 'redux/modules/member';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
-import defaultAvatar from '../assets/avatar.jpeg';
+import defaultAvatar from '../assets/avatar.jpg';
 
 const NICKNAME_LIMIT = 20;
 const CONTENT_LIMIT = 100;
