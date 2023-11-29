@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import defaultAvatar from "../assets/avatar.jpeg";
+import defaultAvatar from "../assets/avatar.jpg";
 
 const StLetterContainer = styled.li`
   padding: 12px;
