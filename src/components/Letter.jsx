@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
-import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
-import defaultAvatar from "../assets/avatar.jpeg";
+import dayjs from 'dayjs';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import defaultAvatar from '../assets/avatar.jpg';
 
 const StLetterContainer = styled.li`
   padding: 12px;
@@ -72,7 +72,7 @@ function Letter({ letter }) {
         <div>
           <h3>{letter?.nickname}</h3>
           <StLetterDate>
-            {`${dayjs(letter?.createdAt).format("YYYY년 MM월 DD일 h:mm")}`}
+            {`${dayjs(letter?.createdAt).format('YYYY년 MM월 DD일 h:mm')}`}
           </StLetterDate>
         </div>
         <StLetterMsg>{letter?.content}</StLetterMsg>
